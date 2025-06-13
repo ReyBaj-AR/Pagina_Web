@@ -1,0 +1,106 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #836835;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+.container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    max-width: 700px;
+    width: 100%;
+}
+
+h1, h2 {
+    color: #A0522D; /* Sienna - Un marrón cálido que evoca el pan tostado */
+    text-align: center;
+}
+
+p {
+    margin-bottom: 10px;
+}
+
+.calculator-section {
+    background-color: #FAEBD7; /* Antique White - Un color crema muy suave */
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 25px;
+    border: 1px solid #D2B48C; /* Tan - Un beige/marrón claro para el borde */
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input[type="number"] {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Selector para el <select> del tipo de pan */
+select {
+    width: calc(100% - 22px); /* Ajusta según sea necesario */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #fff; /* Asegura un fondo blanco para el select */
+    appearance: none; /* Quita estilos por defecto del navegador */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%204%205%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M2%200L0%202h4L2%200zM2%205L0%203h4L2%205z%22%2F%3E%3C%2Fsvg%3E'); /* Flecha personalizada para el select */
+    background-repeat: no-repeat;
+    background-position: right .7em top 50%;
+    background-size: .65em auto;
+}
+
+
+button {
+    background-color: #D4AF37; /* Dorado intenso */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+button:hover {
+    background-color: #C19A2D; /* Un dorado un poco más oscuro para el hover */
+}
+
+.results {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    /*white-space: pre-wrap;*/
+    line-height: 1.2
+}
+
+.results strong {
+    color: #333;
+}
+
+.results p {
+    margin-bottom: 5px; /* Mant

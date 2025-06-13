@@ -1,0 +1,373 @@
+/* Barra de navegación */
+.navbar {
+    padding: 2rem;
+    background-color: #1B1B32; 
+    text-box: WHITE;
+}
+.navbar-collapse {
+    align-items: center; 
+    justify-content: space-between;
+}
+
+/* Estilos para los enlaces del Navbar */
+.navbar-nav .nav-link {
+    color: white; /* ¡Cambia el color del texto a blanco! */
+    font-size: 1.3rem; /* Aumenta el tamaño de la fuente. Puedes ajustar este valor (ej. 1.1rem, 1.3rem) */
+    margin-right: 15px; /* Opcional: añade un poco de espacio entre los enlaces */
+    transition: color 0.3s ease; /* Transición suave para el efecto hover */
+}
+
+
+/* Media Queries para Responsividad */
+@media screen and (max-width: 767px) {
+    .navbar-brand {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 700px) { /* Corregido 'min-width' */
+    .hero-inferior-imagen {
+        max-width: 600px;
+    }
+}
+
+/* Corrección clave para el overlay en pantallas pequeñas */
+@media screen and (max-width: 575px) { /* Usar un breakpoint más bajo como 575px (extra-small de Bootstrap) */
+    .overlay p {
+        font-size: 1.1rem; /* Reducir el tamaño del texto para que quepa */
+        margin-bottom: 5px; /* Menos margen */
+    }
+    .overlay .iconos-contenedor a {
+        font-size: 1.8rem; /* Reducir el tamaño de los iconos */
+        margin: 5px; /* Ajustar el margen entre iconos */
+    }
+    .overlay {
+        padding: 5px; /* Añadir un poco de padding para que el contenido no toque los bordes */
+    }
+}
+/* Media Query para pantallas aún más pequeñas si es necesario */
+@media screen and (max-width: 375px) {
+    .overlay p {
+        font-size: 1rem;
+    }
+    .overlay .iconos-contenedor a {
+        font-size: 1.5rem;
+        margin: 3px;
+    }
+}
+
+
+/* Estilos Generales */
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Muy importante para evitar desbordes */
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* padding-top: 40px;  Ajustado para que las secciones tengan un padding superior por defecto */
+    /* padding-bottom: 40px; Ajustado para que las secciones tengan un padding inferior por defecto */
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+.seccion-oscura {
+    color: white;
+    background-color: #1b1b32;
+}
+
+.seccion-clara {
+    color: black;
+    background-color: #d4e5f58e;
+}
+
+.seccion-titulo {
+    font-size: 2rem;
+    padding: 15px 0;
+    font-family: 'Times New Roman', Times, serif; /* 'cursive' no es una fuente específica, mejor usar un fallback o una fuente real */
+    text-align: center; /* Asegurarse que el título esté centrado */
+}
+
+
+.seccion-descripcion {
+    font-size: 1.55rem;
+    color: black;
+    text-align: center; /* Asegurarse que la descripción esté centrada */
+    margin-bottom: 30px; /* Espacio para que no se pegue al contenido siguiente */
+   }
+
+.seccion-texto {
+    font-size: 20px;
+    line-height: 1.5;
+    text-align: justify;
+    padding: 0 15px; /* Añadir padding horizontal para que el texto no toque los bordes en móvil */
+}
+
+.texto-negro {
+    color: black;
+}
+
+.texto-blanco { /* Corregido de .texto-blaco a .texto-blanco */
+    color: white;
+}
+
+/* Seccion Hero */
+.hero {
+    background-color: #c0d9f08e;
+    min-height: 450px;
+    text-align: center;
+}
+
+.hero-principal {
+    padding: 3rem;
+}
+
+.hero-imagen-desarrollador {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; /* Asegura que la imagen sea redonda */
+    margin: 20px;
+}
+
+.hero-principal h2 {
+    font-size: 1.5rem;
+    color: #615151;
+}
+
+/* Sobre Mi*/
+.sobre-mi {
+    padding: 40px; /* Añadí padding para que el contenido no esté pegado */
+}
+
+.sobre-mi .container { /* Cambié de .contenedor a .container porque ya usas esa clase en el HTML */
+    max-width: 800px; /* Aumenté el max-width para que el texto ocupe más espacio en pantallas grandes */
+    text-align: center;
+}
+
+/* Experiencia*/
+.experiencia {
+    padding: 40px 40px 60px 40px;
+}
+
+.experiencia .columna {
+    padding: 20px;
+    border: 2px solid #8080804d;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    transition: all 0.2s ease-in;
+    margin-bottom: 20px; /* Espacio entre columnas en móviles */
+}
+
+.experiencia .columna:hover {
+    color: white;
+    background-color: #1b1b32;
+}
+
+.experiencia i {
+    font-size: 2.5rem;
+    color: #7ade30;
+    background-color: black;
+    padding: 8px 19px;
+    border-radius: 50%;
+}
+
+.experiencia-titulo {
+    font-size: 25px;
+    font-weight: bold; /* Corregido 'boldt' a 'bold' */
+    margin: 10px 0;
+}
+
+.badges-contenedor {
+    font-size: 20px;
+    font-weight: bold; /* Corregido 'boldt' a 'bold' */
+    margin: 10px 0; /* Corregido '10px o' a '10px 0' */
+}
+
+.badges {
+    margin: 5px;
+}
+
+/*Proyectos*/
+.proyectos-recientes {
+    padding: 40px 20px; /* Añadí padding horizontal para evitar que se peguen los proyectos a los bordes */
+}
+
+.proyectos-contenedor {
+    padding-top: 60px;
+    margin-bottom: 40px;
+}
+
+.proyecto {
+    position: relative;
+    overflow: hidden;
+    margin: 10px; /* Espacio entre los proyectos */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 100%; /* Asegura que la caja de proyecto tenga una altura definida por su contenido */
+}
+
+.proyectos-recientes img {
+    height: 100%;
+    width: 100%;
+    /* padding: 10px; Este padding desplaza la imagen, si quieres un borde, mejor en el .proyecto o un borde CSS */
+    border-radius: 10px;
+    display: block;
+    transition: all 0.3s ease;
+    object-fit: cover; /* Asegura que la imagen cubra el área sin distorsionarse */
+}
+
+.overlay {
+    transition: all 0.5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 0; /* Cambiado de 50% para que cubra todo el contenedor */
+    left: 0; /* Cambiado de 50% */
+    width: 100%;
+    height: 100%;
+    /* transform: translate(-50% , -50%); Ya no es necesario si top y left son 0 */
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px; /* Añadido padding para que el contenido no esté pegado a los bordes */
+}
+
+.overlay p {
+    font-size: 1.5rem; /* Ajustado el tamaño para mejor responsividad */
+    font-weight: bold;
+    margin-bottom: 10px; /* Espacio entre el texto y los iconos */
+    word-wrap: break-word; /* Rompe palabras largas para evitar desbordes */
+    max-width: 90%; /* Limita el ancho del párrafo */
+}
+
+.overlay .iconos-contenedor {
+    display: flex;
+    justify-content: center; /* Centrar los iconos */
+    flex-wrap: wrap; /* Permite que los iconos salten de línea si no caben */
+    gap: 15px; /* Espacio entre los iconos */
+}
+
+.overlay .iconos-contenedor a {
+    color: white;
+    font-size: 2.5rem; /* Ajustado el tamaño de los iconos para responsividad */
+    margin: 5px; /* Ajustado el margen para menor separación en móvil */
+    transition: all 0.3s ease;
+}
+
+.overlay .iconos-contenedor a:hover {
+    color: #00bcd4; /* Color de ejemplo */
+}
+
+.proyecto:hover img {
+    opacity: 0.2;
+    transform: scale(1.05); /* Efecto de zoom suave */
+}
+
+.proyecto:hover .overlay {
+    opacity: 1;
+}
+
+/*Contacto*/
+.contacto .container {
+    max-width: 1100px;
+    min-height: 200px;
+    padding: 20px;
+}
+
+.contacto .rectangulo {
+    margin-top: -5rem;
+    background-color: rgba(41, 76, 87, 0.966);
+    border-radius: 10px;
+    box-shadow: 0px 1px 4px 1px white;
+}
+
+.contacto .row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.contacto .descripcion {
+    color:White     rgb(47, 186, 228);
+    font-size: 1.2rem;
+}
+
+.contacto button {
+    color: white;
+    font-weight: bold;
+    background-color: transparent;
+    border: 2px solid white;
+    padding: 1.25em 2em;
+    margin: 10px;
+    border-radius: 100px;
+    transition: all 0.2s ease-in-out; 
+}
+
+.contacto button i {
+    color: white;
+    font-size: 1.3rem;
+    transition: all 0.2 ease-in-out;
+}
+
+/* Footer "Pie de Pagina"*/
+.footer {
+    min-height: 100px; /* Ajusté el min-height del footer */
+    background-color: #1b1b32; /* Añadido color de fondo para el footer */
+    color: white; /* Color de texto para el footer */
+}
+
+.footer-texto {
+    font-size: 1.2rem; 
+    padding: 5px;
+    margin-bottom: 10px; /* Aumenté el margen para separar de los iconos */
+}
+
+.iconos-redes-sociales a {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    padding: 2px;
+    margin: 10px; /* Ajustado el margen para que no se peguen tanto */
+    border: 2px solid white; /* Cambiado a blanco para contrastar con fondo oscuro del footer */
+    border-radius: 50%;
+    transition: all 0.2s ease-in; 
+}
+.iconos-redes-sociales a:hover {
+    background-color: white; /* Fondo blanco al pasar el mouse */
+    border: 2px solid #00bcd4; /* Borde de color al pasar el mouse */
+}
+
+.iconos-redes-sociales a:hover i {
+    color: black; /* El icono se vuelve negro al pasar el mouse */
+}
+
+/* Clases generales (corregidas o mejoradas) */
+.centrar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.fixed-bottom {
+    display: block !important;
+    z-index: 9999;
+}
+
+

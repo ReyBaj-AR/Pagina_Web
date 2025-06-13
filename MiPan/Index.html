@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Panadera - Unificada</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Proyecto Mi Pan</h1>
+        <p>Está pensado para pequeños panaderos artesanales que quieren comenzar a emprender.</p>
+        <p> Este software es una calculadora de porcentaje panadero, vos elegís la receta que querés hacer, ingresas la cantidad de harina que vas a utilizar para esa receta, y el sistema te devuelve las cantidades necesarias para el resto de los ingredientes.<br>A medida que vaya pasando el tiempo, voy a ir agregando mas recetas.</p>
+
+        <div class="calculator-section">
+            <h2>Calculadora de Porcentaje Panadero</h2>
+
+            <label for="tipoPan">Selecciona el tipo de pan:</label>
+            <select id="tipoPan">
+                <option value="molde">Pan de Molde Clásico</option>
+                <option value="hokkaido">Pan de Hokkaido</option>
+                <option value="salvado">Pan de Salvado</option>
+                <option value="calabaza">Pan de Calabaza</option>
+                <option value="relleno">Pan relleno de Cheddar y Panceta</option>
+                <option value="lactal">Pan Lactal</option>
+            </select>
+
+            <label for="cantidadHarina">Cantidad de Harina (Gramos):</label>
+            <input type="number" id="cantidadHarina" value="0" min="1" onfocus="this.select()">
+            
+            <button onclick="calcularPan()">Calcular Ingredientes</button>
+
+            <div id="resultados" class="results">
+                <p>Aquí se mostrarán los resultados.</p>
+            </div>
+        </div>
+
+        <p class="footer">Que te salga rico el pan - Un Abrazo, ReyBaj.</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
