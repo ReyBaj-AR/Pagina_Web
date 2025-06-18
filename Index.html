@@ -15,32 +15,40 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-md navbar-ligth">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-togglerdemo01" aria-controls="navbar-togglerdemo01" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbar-togglerdemo01"> 
-                <a class="navbar-brand" href="#">
-                    <!----
-                    <img src="imagenes/icono.jpg" width="50" alt="logo de la pagina web"> -->
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-togglerdemo01" aria-controls="navbar-togglerdemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar-togglerdemo01"> 
+            <a class="navbar-brand" href="#">
                 </a>
-                <ul class="navbar-nav d-flex justify-content-center align-items-center"> <li class="nav-item">
-                        <a class="nav-link" href="#sobre-mi">Sobre mí</a> </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#proyectos">Desarrollos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#contacto">Contacto</a>   
-                    </li>
-                </ul>
-            </div>
+            <ul class="navbar-nav d-flex justify-content-center align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="#sobre-mi">Sobre mí</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#proyectos">Desarrollos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contacto">Contacto</a>  
+                </li>
+                <li class="nav-item dropdown"> <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        Descargar CV
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><a class="dropdown-item" href="ruta/a/tu/cv_breve.pdf" download="Tu_CV_Breve.pdf">Breve</a></li>
+                        <li><a class="dropdown-item" href="ruta/a/tu/cv_extendido.pdf" download="Tu_CV_Extendido.pdf">Extendido</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <section class="hero align-items-stretch"> 
         <div class="hero-principal d-flex flex-column justify-content-center align-items-center">
             <img class="hero-imagen-desarrollador rounded-circle" src="./Imagenes/ReyBaj.jpeg" alt="foto de ReyBaj"> 
-            <h1>ReyBaj</h1>
+            <h1>Javier Varela</h1>
             <h2>Bienvenidos a mi página web</h2>
         </div>
         <div class="hero-inferior">
@@ -172,7 +180,7 @@ En esta página vas a encontrar proyectos relacionados con mis intereses, mis ex
           <div class="mb-3 d-flex flex-column align-items-center"> <label for="mensaje" class="form-label text-dark">Mensaje</label>
             <textarea class="form-control text-center" id="mensaje" name="mensaje" rows="5" required></textarea> </div>
           <div class="d-grid">
-            <button type="submit" class="btn btn-primary btn-sm mx-auto"> Enviar <i class="bi bi-envelope-check-fill ms-2"></i>
+            <button type="submit" class="btn btn-info btn-sm mx-auto"> Enviar <i class="bi bi-envelope-check-fill ms-2"></i>
             </button>
           </div>
         </form>

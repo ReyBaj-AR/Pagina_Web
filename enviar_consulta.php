@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $mensaje = htmlspecialchars(trim($_POST["mensaje"]));
 
     $destinatario = "javyvarela@gmail.com";
-    $asunto = "Consulta desde el sitio web";
+    $asunto = "Mensaje desde tu página web";
     $contenido = "Nombre: $nombre\n";
     $contenido .= "Email: $email\n";
     $contenido .= "Mensaje:\n$mensaje\n";
