@@ -44,7 +44,7 @@ function calcularPan() {
                     <li>Incorporar la levadura "desgranada" y seguir amasando hasta que se desintegre en la masa.</li>
                     <li>Incorporar la manteca blanda y amasar hasta desarrollar el gluten (masa suave y elástica).</li>
                     <li>Quitar de la amasadora y dejar fermentar la masa en un recipiente hasta que duplique su volumen.</li>
-                    <li>Desgasificar, formar los panes y colocar en los moldes.</li>
+                    <li>Desgasificar, formar los panes estirando la masa en forma de rectángulo y enrrollar,  colocar en los moldes con el cierre hacia abajo.</li>
                     <li>Dejar fermentar por segunda vez hasta que los panes sobrepasen el molde.</li>
                     <li>Pincelar con doradura "Huevo, sal y leche".</li>
                     <li>Hornear a 180°C hasta que esté dorado.</li>
@@ -239,13 +239,13 @@ function calcularPan() {
             modoElaboracion = `
                 <h4>Modo de Elaboración</h4>
                 <ol>
-                    <li> En el bowl de la amasadora Disolver la sal, la miel y el azúcar, en el agua y la leche.</li>
-                    <li>Incorporara la harina.</li>
+                    <li> En el bowl de la amasadora disolver la sal, la miel y el azúcar, en el agua y la leche.</li>
+                    <li>Incorporar la harina.</li>
                     <li>Amasar hasta unir todos los ingredientes.</li>
-                    <li>Incorporara la levadura "desgranada" y seguir amasando hasta que se desintegre en la masa.</li>
+                    <li>Incorporar la levadura "desgranada" y seguir amasando hasta que se desintegre en la masa.</li>
                     <li>Incorporar la manteca blanda y amasar hasta desarrollar el gluten (masa suave y elástica).</li>
                     <li>Quitar de la amasadora y dejar fermentar la masa en un recipiente hasta que duplique su volumen.</li>
-                    <li>Desgasificar, formar los panes y colocar en los moldes.</li>
+                    <li>Desgasificar, formar los panes estirando la masa en forma de rectángulo y enrollar, colocar en los moldes con el cierre hacia abajo.</li>
                     <li>Dejar fermentar por segunda vez hasta que los panes sobrepasen el molde.</li>
                     <li>Pincelar con doradura "Huevo, sal y leche".</li>
                     <li>Hornear a 180°C hasta que esté dorado.</li>
