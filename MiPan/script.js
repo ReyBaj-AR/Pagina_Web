@@ -39,14 +39,14 @@ function calcularPan() {
                 <h4>Modo de elaboración en amasadora industrial</h4>
                 <ol>
                     <li>Disolver la sal, la miel y el azúcar en el agua.</li>
-                    <li>Incorporara la harina.</li>
+                    <li>Incorporar la harina.</li>
                     <li>Amasar hasta unir todos los ingredientes.</li>
-                    <li>Incorporara la levadura "desgranada" y seguir amasando hasta que se desintegre en la masa.</li>
+                    <li>Incorporar la levadura "desgranada" y seguir amasando hasta que se desintegre en la masa.</li>
                     <li>Incorporar la manteca blanda y amasar hasta desarrollar el gluten (masa suave y elástica).</li>
                     <li>Quitar de la amasadora y dejar fermentar la masa en un recipiente hasta que duplique su volumen.</li>
                     <li>Desgasificar, formar los panes y colocar en los moldes.</li>
-                    <li>Dejar fermentar por segunda vez hasta que los panes sobrepasen el molde</li>
-                    <li>pincelar con doradura "Huevo, sal y leche"</li>
+                    <li>Dejar fermentar por segunda vez hasta que los panes sobrepasen el molde.</li>
+                    <li>Pincelar con doradura "Huevo, sal y leche".</li>
                     <li>Hornear a 180°C hasta que esté dorado.</li>
                 </ol>
             `;
@@ -82,13 +82,13 @@ function calcularPan() {
                 <h4>Modo de Elaboración en amasadora industrial</h4>
                 <ol>
                     <li>*Preparación del Tangzhong:* Cocinar a fuego moderado la harina y el agua del Tangzhong revolviendo constantemente hasta gelificar "Pasta Espesa" (65°C). Cubrir con film en contacto y dejar enfriar.</li>
-                    <li>Colocar en el bowl de la amasadora el Tangzhong frío, el resto de la harina,  el azúcar, la sal, la leche y el huevo. Amasar hasta unir.</li>
-                    <li>Incorporara la levadura "desgranada" y seguir amasando hasta que se desintegre en la masa.</li>
+                    <li>Colocar en el bowl de la amasadora el Tangzhong frío, el resto de la harina,  el azúcar, la sal, la leche y el huevo, amasar hasta unir.</li>
+                    <li>Incorporar la levadura "desgranada" y seguir amasando hasta que se desintegre en la masa.</li>
                     <li>Incorporar la manteca blanda y seguir amasando hasta obtener una masa muy elástica y suave.</li>
                     <li>Retirar de la amasadora y dejar fermentar hasta duplicar volumen.</li>
                     <li>Dividir la masa, bollar o armar la forma deseada (generalmente un enrollado de 3 o 5 partes) y colocar en los moldes.</li>
                     <li>Dejar fermentar por segunda vez.</li>
-                    <li>pincelar con doradura "Huevo, sal y leche"</li>
+                    <li>Pincelar con doradura "Huevo, sal y leche".</li>
                     <li>Hornear a 180°C (350°F) hasta que esté dorado.</li>
                 </ol>
             `;
@@ -120,14 +120,14 @@ function calcularPan() {
                 <h4>Modo de Elaboración</h4>
                 <ol>
                     <li>En el bowl de la amasadora agregar el agua, el salvado de trigo, la sal y la miel.</li>
-                    <li>Incorporara la harina.</li>
+                    <li>Incorporar la harina.</li>
                     <li>Amasar hasta unir todos los ingredientes.</li>
-                    <li>Incorporara la levadura "desgranada" y seguir amasando hasta que se desintegre en la masa.</li>
+                    <li>Incorporar la levadura "desgranada" y seguir amasando hasta que se desintegre en la masa.</li>
                     <li>Incorporar la manteca blanda y amasar hasta desarrollar el gluten (masa suave y elástica).</li>
                     <li>Quitar de la amasadora y dejar fermentar la masa en un recipiente hasta que duplique su volumen.</li>
                     <li>Desgasificar, formar los panes y colocar en los moldes.</li>
-                    <li>Dejar fermentar por segunda vez hasta que los panes sobrepasen el molde</li>
-                    <li>Pincelar con doradura "Huevo, sal y leche"</li>
+                    <li>Dejar fermentar por segunda vez hasta que los panes sobrepasen el molde.</li>
+                    <li>Pincelar con doradura "Huevo, sal y leche".</li>
                     <li>Hornear a 180°C hasta que esté dorado.</li>
                 </ol>
             `;
@@ -165,8 +165,8 @@ function calcularPan() {
                     <li>Incorporar la manteca blanda y amasar hasta desarrollar el gluten (masa suave y elástica).</li>
                     <li>Quitar de la amasadora y dejar fermentar la masa en un recipiente hasta que duplique su volumen.</li>
                     <li>Desgasificar, formar los panes y colocar en los moldes.</li>
-                    <li>Dejar fermentar por segunda vez hasta que los panes sobrepasen el molde</li>
-                    <li>Pincelar con doradura "Huevo, sal y leche"</li>
+                    <li>Dejar fermentar por segunda vez hasta que los panes sobrepasen el molde.</li>
+                    <li>Pincelar con doradura "Huevo, sal y leche".</li>
                     <li>Echar semillas de calabaza por encima.</li>
                     <li>Hornear a 180°C hasta que esté dorado.</li>
                 </ol>
@@ -207,8 +207,8 @@ function calcularPan() {
                     <li>Incorporar la manteca blanda y amasar hasta desarrollar el gluten (masa suave y elástica).</li>
                     <li>Quitar de la amasadora y dejar fermentar la masa en un recipiente hasta que duplique su volumen.</li>
                     <li>Formado para cada pan: estirar la masa en forma de rectángulo, colocar el relleno de la mitad del rectángulo hacia abajo y con la parte de arriba tapar el relleno, Enrollar y colocar en el molde.</li>
-                    <li>Dejar fermentar por segunda vez hasta que los panes sobrepasen el molde</li>
-                    <li>pincelar con doradura "Huevo, sal y leche"</li>
+                    <li>Dejar fermentar por segunda vez hasta que los panes sobrepasen el molde.</li>
+                    <li>Pincelar con doradura "Huevo, sal y leche".</li>
                     <li>Hornear a 180°C hasta que esté dorado.</li>
                 </ol>
             `;
@@ -246,8 +246,8 @@ function calcularPan() {
                     <li>Incorporar la manteca blanda y amasar hasta desarrollar el gluten (masa suave y elástica).</li>
                     <li>Quitar de la amasadora y dejar fermentar la masa en un recipiente hasta que duplique su volumen.</li>
                     <li>Desgasificar, formar los panes y colocar en los moldes.</li>
-                    <li>Dejar fermentar por segunda vez hasta que los panes sobrepasen el molde</li>
-                    <li>pincelar con doradura "Huevo, sal y leche"</li>
+                    <li>Dejar fermentar por segunda vez hasta que los panes sobrepasen el molde.</li>
+                    <li>Pincelar con doradura "Huevo, sal y leche".</li>
                     <li>Hornear a 180°C hasta que esté dorado.</li>
                 </ol>
             `;
