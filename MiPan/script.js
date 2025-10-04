@@ -1,7 +1,7 @@
 function calcularPan() {
     // Obtener el tipo de pan seleccionado
     const tipoPan = document.getElementById('tipoPan').value;
-    
+
     // Obtener la cantidad de harina del campo de entrada
     const harina = parseFloat(document.getElementById('cantidadHarina').value);
 
@@ -12,6 +12,7 @@ function calcularPan() {
     }
 
     let resultadosHTML = ''; // Variable para almacenar el HTML de los resultados
+    let modoElaboracion = ''; // *Nueva variable para el modo de elaboración*
 
     switch (tipoPan) {
         case 'molde':
@@ -32,6 +33,22 @@ function calcularPan() {
                 <p><strong>Miel:</strong> ${mielMolde} Gramos</p>
                 <p><strong>Azucar:</strong> ${azucarMolde} Gramos</p>
                 <p><strong>Levadura:</strong> ${levaduraMolde} Gramos</p>
+            `;
+            // *Modo de elaboración para Pan de Molde Clásico*
+            modoElaboracion = `
+                <h4>Modo de elaboración en amasadora industrial</h4>
+                <ol>
+                    <li>Disolver la sal, la miel y el azúcar en el agua.</li>
+                    <li>Incorporara la harina.</li>
+                    <li>Amasar hasta unir todos los ingredientes.</li>
+                    <li>Incorporara la levadura "desgranada" y seguir amasando hasta que se desintegre en la masa.</li>
+                    <li>Incorporar la manteca blanda y amasar hasta desarrollar el gluten (masa suave y elástica).</li>
+                    <li>Quitar de la amasadora y dejar fermentar la masa en un recipiente hasta que duplique su volumen.</li>
+                    <li>Desgasificar, formar los panes y colocar en los moldes.</li>
+                    <li>Dejar fermentar por segunda vez hasta que los panes sobrepasen el molde</li>
+                    <li>pincelar con doradura "Huevo, sal y leche"</li>
+                    <li>Hornear a 180°C hasta que esté dorado.</li>
+                </ol>
             `;
             break;
 
@@ -60,6 +77,21 @@ function calcularPan() {
                 <p><strong>Huevo:</strong> ${huevo} Gramos</p>
                 <p><strong>Manteca:</strong> ${mantecaHokkaido} Gramos</p>
             `;
+            // *Modo de elaboración para Pan de Hokkaido*
+            modoElaboracion = `
+                <h4>Modo de Elaboración en amasadora industrial</h4>
+                <ol>
+                    <li>*Preparación del Tangzhong:* Cocinar a fuego moderado la harina y el agua del Tangzhong revolviendo constantemente hasta gelificar "Pasta Espesa" (65°C). Cubrir con film en contacto y dejar enfriar.</li>
+                    <li>Colocar en el bowl de la amasadora el Tangzhong frío, el resto de la harina,  el azúcar, la sal, la leche y el huevo. Amasar hasta unir.</li>
+                    <li>Incorporara la levadura "desgranada" y seguir amasando hasta que se desintegre en la masa.</li>
+                    <li>Incorporar la manteca blanda y seguir amasando hasta obtener una masa muy elástica y suave.</li>
+                    <li>Retirar de la amasadora y dejar fermentar hasta duplicar volumen.</li>
+                    <li>Dividir la masa, bollar o armar la forma deseada (generalmente un enrollado de 3 o 5 partes) y colocar en los moldes.</li>
+                    <li>Dejar fermentar por segunda vez.</li>
+                    <li>pincelar con doradura "Huevo, sal y leche"</li>
+                    <li>Hornear a 180°C (350°F) hasta que esté dorado.</li>
+                </ol>
+            `;
             break;
 
         case 'salvado':
@@ -71,7 +103,6 @@ function calcularPan() {
             const mielsalvado = Math.round(harina * 0.03);
             const azucarsalvado = Math.round(harina * 0.02);
             const levadurasalvado = Math.round(harina * 0.01);
-            
 
             resultadosHTML = `
                 <h3>Resultados para Pan de Salvado</h3>
@@ -83,7 +114,22 @@ function calcularPan() {
                 <p><strong>Miel:</strong> ${mielsalvado} Gramos</p>
                 <p><strong>Azucar:</strong> ${azucarsalvado} Gramos</p>
                 <p><strong>Levadura:</strong> ${levadurasalvado} Gramos</p>
-                
+            `;
+            // *Modo de elaboración para Pan de Salvado*
+            modoElaboracion = `
+                <h4>Modo de Elaboración</h4>
+                <ol>
+                    <li>En el bowl de la amasadora agregar el agua, el salvado de trigo, la sal y la miel.</li>
+                    <li>Incorporara la harina.</li>
+                    <li>Amasar hasta unir todos los ingredientes.</li>
+                    <li>Incorporara la levadura "desgranada" y seguir amasando hasta que se desintegre en la masa.</li>
+                    <li>Incorporar la manteca blanda y amasar hasta desarrollar el gluten (masa suave y elástica).</li>
+                    <li>Quitar de la amasadora y dejar fermentar la masa en un recipiente hasta que duplique su volumen.</li>
+                    <li>Desgasificar, formar los panes y colocar en los moldes.</li>
+                    <li>Dejar fermentar por segunda vez hasta que los panes sobrepasen el molde</li>
+                    <li>Pincelar con doradura "Huevo, sal y leche"</li>
+                    <li>Hornear a 180°C hasta que esté dorado.</li>
+                </ol>
             `;
             break;
 
@@ -107,6 +153,23 @@ function calcularPan() {
                 <p><strong>Azucar:</strong> ${azucarcalabaza} Gramos</p>
                 <p><strong>Levadura:</strong> ${levaduracalabaza} Gramos</p>
                 <p><strong>Calabaza horneada y pisada:</strong> ${calabazacalabaza} Gramos</p>
+            `;
+            // *Modo de elaboración para Pan de Calabaza*
+            modoElaboracion = `
+                <h4>Modo de Elaboración</h4>
+                <ol>
+                    <li>En el bowl de la amasadora agregar el agua "No toda, reservar un poco, puede no ser necesaria", el pure de calabaza, la sal y la miel.</li>
+                    <li>Incorporara la harina.</li>
+                    <li>Amasar hasta unir todos los ingredientes, "Chequear la hidratación y agregar mas agua si hiciera falta".</li>
+                    <li>Incorporara la levadura "desgranada" y seguir amasando hasta que se desintegre en la masa.</li>
+                    <li>Incorporar la manteca blanda y amasar hasta desarrollar el gluten (masa suave y elástica).</li>
+                    <li>Quitar de la amasadora y dejar fermentar la masa en un recipiente hasta que duplique su volumen.</li>
+                    <li>Desgasificar, formar los panes y colocar en los moldes.</li>
+                    <li>Dejar fermentar por segunda vez hasta que los panes sobrepasen el molde</li>
+                    <li>Pincelar con doradura "Huevo, sal y leche"</li>
+                    <li>Echar semillas de calabaza por encima.</li>
+                    <li>Hornear a 180°C hasta que esté dorado.</li>
+                </ol>
             `;
             break;
 
@@ -132,7 +195,22 @@ function calcularPan() {
                 <p><strong>Levadura:</strong> ${levadurarelleno} Gramos</p>
                 <p><strong>Queso Cheddar:</strong> ${cheddarrelleno} Gramos</p>
                 <p><strong>Panceta Ahumada:</strong> ${pancetarelleno} Gramos</p>
-                
+            `;
+            // *Modo de elaboración para Pan relleno*
+            modoElaboracion = `
+                <h4>Modo de Elaboración</h4>
+                <ol>
+                    <li>Disolver la sal, la miel y el azúcar en el agua.</li>
+                    <li>Incorporar la harina.</li>
+                    <li>Amasar hasta unir todos los ingredientes.</li>
+                    <li>Incorporar la levadura "desgranada" y seguir amasando hasta que se desintegre en la masa.</li>
+                    <li>Incorporar la manteca blanda y amasar hasta desarrollar el gluten (masa suave y elástica).</li>
+                    <li>Quitar de la amasadora y dejar fermentar la masa en un recipiente hasta que duplique su volumen.</li>
+                    <li>Formado para cada pan: estirar la masa en forma de rectángulo, colocar el relleno de la mitad del rectángulo hacia abajo y con la parte de arriba tapar el relleno, Enrollar y colocar en el molde.</li>
+                    <li>Dejar fermentar por segunda vez hasta que los panes sobrepasen el molde</li>
+                    <li>pincelar con doradura "Huevo, sal y leche"</li>
+                    <li>Hornear a 180°C hasta que esté dorado.</li>
+                </ol>
             `;
             break;
 
@@ -157,20 +235,33 @@ function calcularPan() {
                 <p><strong>Azucar:</strong> ${azucarlactal} Gramos</p>
                 <p><strong>Levadura:</strong> ${levaduralactal} Gramos</p>
             `;
+            // *Modo de elaboración para Pan Lactal*
+            modoElaboracion = `
+                <h4>Modo de Elaboración</h4>
+                <ol>
+                    <li> En el bowl de la amasadora Disolver la sal, la miel y el azúcar, en el agua y la leche.</li>
+                    <li>Incorporara la harina.</li>
+                    <li>Amasar hasta unir todos los ingredientes.</li>
+                    <li>Incorporara la levadura "desgranada" y seguir amasando hasta que se desintegre en la masa.</li>
+                    <li>Incorporar la manteca blanda y amasar hasta desarrollar el gluten (masa suave y elástica).</li>
+                    <li>Quitar de la amasadora y dejar fermentar la masa en un recipiente hasta que duplique su volumen.</li>
+                    <li>Desgasificar, formar los panes y colocar en los moldes.</li>
+                    <li>Dejar fermentar por segunda vez hasta que los panes sobrepasen el molde</li>
+                    <li>pincelar con doradura "Huevo, sal y leche"</li>
+                    <li>Hornear a 180°C hasta que esté dorado.</li>
+                </ol>
+            `;
             break;
-
-
-
-
 
         default:
             resultadosHTML = "<p style='color: orange;'>Por favor, selecciona un tipo de pan para calcular.</p>";
             break;
     }
 
-    // Mostrar los resultados en la única div de resultados
-    document.getElementById('resultados').innerHTML = resultadosHTML;
+    // *Unir los resultados con el modo de elaboración*
+    document.getElementById('resultados').innerHTML = resultadosHTML + modoElaboracion;
 }
+
 
 // Puedes añadir esta línea para que al cargar la página se realice un cálculo inicial
 // window.onload = calcularPan; // Descomenta si quieres que calcule al cargar la página
