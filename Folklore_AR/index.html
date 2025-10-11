@@ -9,50 +9,150 @@
         rel="stylesheet" 
         href="https://unpkg.com/leaflet/dist/leaflet.css" 
     />
+    <link 
+        rel="stylesheet" 
+        href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" 
+    />
 
     <style>
+    /* ------------------------------------------- */
+    /* ESTILOS GENERALES Y DEL MAPA */
+    /* ------------------------------------------- */
+    :root {
+        --color-celeste-claro: #E0F7FA; /* Muy claro, casi blanco */
+        --color-celeste-medio: #4FC3F7; /* Celeste medio para botones y bordes */
+        --color-celeste-oscuro: #0288D1; /* Celeste oscuro para texto/títulos */
+        --color-blanco: #FFFFFF;
+        --color-gris-claro: #f4f4f4;
+    }
+    
     body {
-        /* Configuración para el centrado */
         margin: 0;
         padding: 0;
         font-family: Arial, sans-serif;
-        display: flex; /* Habilitar Flexbox en el body */
-        justify-content: center; /* Centrar contenido horizontalmente */
-        align-items: center; /* Centrar contenido verticalmente (si es necesario) */
-        min-height: 100vh; /* Asegura que el body ocupe toda la altura de la ventana */
-        background-color: #f0f0f0; /* Color de fondo para que se vea el margen */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: var(--color-gris-claro);
     }
 
     #mapa {
-        /* Nuevo tamaño y centrado */
-        height: 70vh; /* Ocupa el 70% de la altura de la ventana */
-        width: 90%; /* Ajusta el ancho para dejar un margen lateral */
-        max-width: 1200px; /* Opcional: limita el ancho máximo en pantallas muy grandes */
-        border: 2px solid #333; /* Opcional: borde para destacar el área del mapa */
-        border-radius: 8px; /* Opcional: esquinas redondeadas */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para darle profundidad */
+        height: 70vh; 
+        width: 90%; 
+        max-width: 1200px; 
+        border: 3px solid var(--color-celeste-oscuro);
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
     }
     
-    /* El formulario de marcador se mantiene por encima del mapa */
+    /* ------------------------------------------- */
+    /* ESTILOS DEL FORMULARIO EMERGENTE */
+    /* ------------------------------------------- */
     .marcador-form {
         position: absolute;
-        top: 50px; /* Ajustamos la posición */
-        right: 50px;
+        /* Lo centramos un poco mejor en la pantalla */
+        top: 50%; 
+        left: 50%;
+        transform: translate(-50%, -50%); 
         z-index: 1000;
-        background: rgba(9, 176, 226, 0.534);
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-        max-width: 400px;
+        /* Colores celestes y blancos */
+        background: var(--color-blanco);
+        border: 2px solid var(--color-celeste-medio);
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        max-width: 450px;
+        width: 90%;
         display: none; 
+        transition: opacity 0.3s ease;
     }
-    .marcador-form input, .marcador-form textarea, .marcador-form button {
+
+    .marcador-form h3 {
+        color: var(--color-celeste-oscuro);
+        text-align: center;
+        margin-top: 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--color-celeste-claro);
+    }
+
+    .marcador-form p {
+        font-size: 0.9em;
+        color: #666;
+    }
+    
+    .marcador-form input[type="text"], 
+    .marcador-form input[type="email"], 
+    .marcador-form input[type="tel"], 
+    .marcador-form textarea {
         width: 100%;
-        padding: 8px;
-        margin-bottom: 10px;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid var(--color-celeste-medio);
+        border-radius: 5px;
         box-sizing: border-box;
+        background-color: var(--color-celeste-claro);
     }
-</style>
+
+    .marcador-form textarea {
+        resize: vertical;
+    }
+    
+    .marcador-form label {
+        display: block;
+        margin-bottom: 5px;
+        color: var(--color-celeste-oscuro);
+        font-weight: bold;
+    }
+
+    /* Estilos de los botones */
+    .marcador-form button {
+        cursor: pointer;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background-color 0.2s ease;
+        margin-top: 10px;
+        width: 48%; /* Para que queden uno al lado del otro */
+    }
+
+    /* Botón Guardar */
+    .marcador-form button[type="submit"] {
+        background-color: var(--color-celeste-oscuro);
+        color: var(--color-blanco);
+        float: left;
+    }
+    .marcador-form button[type="submit"]:hover {
+        background-color: #01579B; /* Tono más oscuro al pasar el mouse */
+    }
+
+    /* Botón Cancelar */
+    .marcador-form button[type="button"] {
+        background-color: var(--color-celeste-medio);
+        color: #333;
+        float: right;
+    }
+    .marcador-form button[type="button"]:hover {
+        background-color: #81D4FA; /* Tono más claro al pasar el mouse */
+    }
+
+    /* Contenedor de botones para limpiar el float */
+    .button-container::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    /* Campo de subida de foto */
+    .marcador-form input[type="file"] {
+        background-color: transparent;
+        border: none;
+        padding: 0;
+        margin-bottom: 15px;
+    }
+
+    </style>
 </head>
 <body>
 
@@ -60,24 +160,36 @@
 
     <div class="marcador-form" id="marcador-form">
         <h3>Añadir Nueva Academia de Danza</h3>
-        <p>Coordenadas: <span id="coords-display"></span></p>
+        <p>Coordenadas: <span id="coords-display">Lat: N/A, Lng: N/A</span></p>
 
         <form id="add-marker-form">
-            <input type="text" id="titulo" placeholder="Nombre de la Academia" required>
-            <textarea id="descripcion" placeholder="Descripción de actividades" rows="3" required></textarea>
+            <input type="text" id="nombre-academia" placeholder="Nombre de la Academia" required>
+            <input type="text" id="direccion" placeholder="Dirección" required>
+            <input type="text" id="localidad" placeholder="Localidad" required>
+            <input type="text" id="departamento" placeholder="Departamento" required>
+            <input type="text" id="provincia" placeholder="Provincia" required>
+            
+            <input type="text" id="nombre-profesor" placeholder="Nombre del Profesor/a" required>
+            <input type="tel" id="telefono" placeholder="Teléfono" required>
+            <input type="email" id="mail" placeholder="Correo Electrónico" required>
+            
+            <textarea id="observaciones" placeholder="Describe aqui los servicios que ofrece tu academia y los días y horarios de clase " rows="3"></textarea>
             
             <label for="foto">Subir Foto:</label>
-            <input type="file" id="foto" accept="image/*" required>
+            <input type="file" id="foto" accept="image/*">
             
             <input type="hidden" id="latitud">
             <input type="hidden" id="longitud">
             
-            <button type="submit">Guardar Academia</button>
-            <button type="button" onclick="document.getElementById('marcador-form').style.display = 'none';">Cancelar</button>
+            <div class="button-container">
+                <button type="submit">Guardar Academia</button>
+                <button type="button" onclick="document.getElementById('marcador-form').style.display = 'none';">Cancelar</button>
+            </div>
         </form>
     </div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
     <script src="script.js"></script>
 </body>
