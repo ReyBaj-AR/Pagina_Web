@@ -59,15 +59,69 @@
         /* Colores celestes y blancos */
         background: var(--color-blanco);
         border: 2px solid var(--color-celeste-medio);
-        padding: 25px;
+        padding: 15px; /* Formulario compacto */
         border-radius: 12px;
         box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-        max-width: 450px;
+        max-width: 250px; /* Formulario compacto */
         width: 90%;
         display: none; 
         transition: opacity 0.3s ease;
     }
 
+    /* Ocultamos el formulario por defecto para solo mostrar la confirmación primero */
+    .form-content {
+        display: none;
+    }
+
+    /* Estilos para el popup de confirmación */
+    .confirmation-popup {
+        text-align: center;
+    }
+
+    .confirmation-popup h3 {
+        color: var(--color-celeste-oscuro);
+        margin-top: 0;
+        margin-bottom: 20px;
+    }
+
+    /* Estilo para mostrar las coordenadas en el popup */
+    .confirmation-popup p {
+        font-size: 0.9em;
+        margin-bottom: 20px;
+        color: #666;
+    }
+
+    .confirmation-popup button {
+        cursor: pointer;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background-color 0.2s ease;
+        width: 48%;
+        margin: 5px 1%;
+    }
+
+    /* Botón Sí */
+    #confirmar-si {
+        background-color: var(--color-celeste-oscuro);
+        color: var(--color-blanco);
+    }
+    #confirmar-si:hover {
+        background-color: #01579B; 
+    }
+
+    /* Botón No */
+    #confirmar-no {
+        background-color: var(--color-celeste-medio);
+        color: #333;
+    }
+    #confirmar-no:hover {
+        background-color: #81D4FA; 
+    }
+
+
+    /* ESTILOS DEL FORMULARIO ORIGINAL (APLICADOS SOLO CUANDO SE MUESTRA) */
     .marcador-form h3 {
         color: var(--color-celeste-oscuro);
         text-align: center;
@@ -84,10 +138,11 @@
     .marcador-form input[type="text"], 
     .marcador-form input[type="email"], 
     .marcador-form input[type="tel"], 
+    .marcador-form input[type="url"], /* Incluido el nuevo input[type="url"] */
     .marcador-form textarea {
         width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
+        padding: 8px; /* Compactado */
+        margin-bottom: 10px; /* Compactado */
         border: 1px solid var(--color-celeste-medio);
         border-radius: 5px;
         box-sizing: border-box;
@@ -105,36 +160,36 @@
         font-weight: bold;
     }
 
-    /* Estilos de los botones */
-    .marcador-form button {
+    /* Estilos de los botones del formulario */
+    .marcador-form .form-content button { 
         cursor: pointer;
-        padding: 10px 15px;
+        padding: 8px 12px; /* Compactado */
         border: none;
         border-radius: 5px;
         font-weight: bold;
         transition: background-color 0.2s ease;
         margin-top: 10px;
-        width: 48%; /* Para que queden uno al lado del otro */
+        width: 48%; 
     }
 
     /* Botón Guardar */
-    .marcador-form button[type="submit"] {
+    .marcador-form .form-content button[type="submit"] {
         background-color: var(--color-celeste-oscuro);
         color: var(--color-blanco);
         float: left;
     }
-    .marcador-form button[type="submit"]:hover {
-        background-color: #01579B; /* Tono más oscuro al pasar el mouse */
+    .marcador-form .form-content button[type="submit"]:hover {
+        background-color: #01579B; 
     }
 
     /* Botón Cancelar */
-    .marcador-form button[type="button"] {
+    .marcador-form .form-content button[type="button"] {
         background-color: var(--color-celeste-medio);
         color: #333;
         float: right;
     }
-    .marcador-form button[type="button"]:hover {
-        background-color: #81D4FA; /* Tono más claro al pasar el mouse */
+    .marcador-form .form-content button[type="button"]:hover {
+        background-color: #81D4FA; 
     }
 
     /* Contenedor de botones para limpiar el float */
@@ -144,12 +199,41 @@
         clear: both;
     }
 
-    /* Campo de subida de foto */
+    /* --- ESTILOS PARA LA SUBIDA DE ARCHIVOS --- */
     .marcador-form input[type="file"] {
-        background-color: transparent;
-        border: none;
-        padding: 0;
+        display: none; 
+    }
+
+    .file-upload-container {
         margin-bottom: 15px;
+        display: flex; 
+        align-items: flex-start; /* Alinea los elementos al inicio (arriba) */
+        gap: 10px; 
+    }
+
+    .custom-file-label {
+        cursor: pointer;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        background-color: var(--color-celeste-medio);
+        color: #333;
+        transition: background-color 0.2s ease;
+        flex-shrink: 0; 
+    }
+
+    .custom-file-label:hover {
+        background-color: #81D4FA; 
+    }
+
+    .file-name-display {
+        font-size: 0.85em;
+        color: #666;
+        /* Permitir salto de línea para que no se desborde */
+        flex-grow: 1; 
+        min-width: 0; 
+        margin-top: 5px; 
     }
 
     </style>
@@ -159,33 +243,46 @@
     <div id="mapa"></div>
 
     <div class="marcador-form" id="marcador-form">
-        <h3>Añadir Nueva Academia de Danza</h3>
-        <p>Coordenadas: <span id="coords-display">Lat: N/A, Lng: N/A</span></p>
+        <div class="confirmation-popup" id="confirmation-popup">
+            <h3>¿Agregar nuevo lugar aquí?</h3>
+            <p>
+                Coordenadas: <span id="popup-coords-display">Lat: N/A, Lng: N/A</span>
+            </p>
+            <button id="confirmar-si">Sí</button>
+            <button id="confirmar-no">No</button>
+        </div>
 
-        <form id="add-marker-form">
-            <input type="text" id="nombre-academia" placeholder="Nombre de la Academia" required>
-            <input type="text" id="direccion" placeholder="Dirección" required>
-            <input type="text" id="localidad" placeholder="Localidad" required>
-            <input type="text" id="departamento" placeholder="Departamento" required>
-            <input type="text" id="provincia" placeholder="Provincia" required>
-            
-            <input type="text" id="nombre-profesor" placeholder="Nombre del Profesor/a" required>
-            <input type="tel" id="telefono" placeholder="Teléfono" required>
-            <input type="email" id="mail" placeholder="Correo Electrónico" required>
-            
-            <textarea id="observaciones" placeholder="Describe aqui los servicios que ofrece tu academia y los días y horarios de clase " rows="3"></textarea>
-            
-            <label for="foto">Subir Foto:</label>
-            <input type="file" id="foto" accept="image/*">
-            
-            <input type="hidden" id="latitud">
-            <input type="hidden" id="longitud">
-            
-            <div class="button-container">
-                <button type="submit">Guardar Academia</button>
-                <button type="button" onclick="document.getElementById('marcador-form').style.display = 'none';">Cancelar</button>
-            </div>
-        </form>
+        <div id="form-content" class="form-content">
+            <h3>Añadir Nueva Academia de Danza</h3>
+            <p>Coordenadas: <span id="coords-display">Lat: N/A, Lng: N/A</span></p>
+
+            <form id="add-marker-form">
+                <input type="text" id="nombre-academia" placeholder="Nombre de la Academia" required>
+                <input type="text" id="direccion" placeholder="Dirección" required>
+                <input type="text" id="localidad" placeholder="Localidad" required>
+                <input type="text" id="departamento" placeholder="Departamento" required>
+                <input type="text" id="provincia" placeholder="Provincia" required>
+                
+                <input type="text" id="nombre-profesor" placeholder="Nombre del Profesor/a" required>
+                <input type="tel" id="telefono" placeholder="Teléfono" required>
+                <input type="email" id="mail" placeholder="Correo Electrónico" required>
+                <input type="url" id="sitio-web" placeholder="Sitio Web (opcional)"> <textarea id="observaciones" placeholder="Describe aqui los servicios que ofrece tu academia y los días y horarios de clase " rows="3"></textarea>
+                
+                <div class="file-upload-container">
+                    <label for="foto" id="foto-label" class="custom-file-label">Seleccionar Foto</label>
+                    <input type="file" id="foto" accept="image/*" style="display: none;"> 
+                    <span id="file-name-display" class="file-name-display">Ningún archivo seleccionado</span>
+                </div>
+                
+                <input type="hidden" id="latitud">
+                <input type="hidden" id="longitud">
+                
+                <div class="button-container">
+                    <button type="submit">Guardar Academia</button>
+                    <button type="button" id="cancelar-form">Cancelar</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>

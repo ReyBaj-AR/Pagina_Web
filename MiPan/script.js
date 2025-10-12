@@ -79,7 +79,7 @@ function calcularPan() {
             `;
             // *Modo de elaboración para Pan de Hokkaido*
             modoElaboracion = `
-                <h4>Modo de Elaboración en amasadora industrial</h4>
+                <h4>Modo de elaboración en amasadora industrial</h4>
                 <ol>
                     <li>*Preparación del Tangzhong:* Cocinar a fuego moderado la harina y el agua del Tangzhong revolviendo constantemente hasta gelificar "Pasta Espesa" (65°C). Cubrir con film en contacto y dejar enfriar.</li>
                     <li>Colocar en el bowl de la amasadora el Tangzhong frío, el resto de la harina,  el azúcar, la sal, la leche y el huevo, amasar hasta unir.</li>
@@ -117,7 +117,7 @@ function calcularPan() {
             `;
             // *Modo de elaboración para Pan de Salvado*
             modoElaboracion = `
-                <h4>Modo de Elaboración</h4>
+                <h4>Modo de elaboración en amasadora industrial</h4>
                 <ol>
                     <li>En el bowl de la amasadora agregar el agua, el salvado de trigo, la sal y la miel.</li>
                     <li>Incorporar la harina.</li>
@@ -156,7 +156,7 @@ function calcularPan() {
             `;
             // *Modo de elaboración para Pan de Calabaza*
             modoElaboracion = `
-                <h4>Modo de Elaboración</h4>
+                <h4>Modo de elaboración en amasadora industrialn</h4>
                 <ol>
                     <li>En el bowl de la amasadora agregar el agua "No toda, reservar un poco, puede no ser necesaria", el pure de calabaza, la sal y la miel.</li>
                     <li>Incorporara la harina.</li>
@@ -198,7 +198,7 @@ function calcularPan() {
             `;
             // *Modo de elaboración para Pan relleno*
             modoElaboracion = `
-                <h4>Modo de Elaboración</h4>
+                <h4>Modo de elaboración en amasadora industrial</h4>
                 <ol>
                     <li>Disolver la sal, la miel y el azúcar en el agua.</li>
                     <li>Incorporar la harina.</li>
@@ -237,7 +237,7 @@ function calcularPan() {
             `;
             // *Modo de elaboración para Pan Lactal*
             modoElaboracion = `
-                <h4>Modo de Elaboración</h4>
+                <h4>Modo de elaboración en amasadora industrialn</h4>
                 <ol>
                     <li> En el bowl de la amasadora disolver la sal, la miel y el azúcar, en el agua y la leche.</li>
                     <li>Incorporar la harina.</li>
