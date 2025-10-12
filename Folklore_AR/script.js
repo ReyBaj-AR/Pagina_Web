@@ -1,15 +1,20 @@
 // =================================================================
+// 0. ESTADO GLOBAL (Simplificado)
+// =================================================================
+// No necesitamos variables de estado ni lógica de login.
+
+// =================================================================
 // 1. INICIALIZACIÓN DEL MAPA
 // =================================================================
 
 // 1.1. Configuración de la vista inicial para Argentina
-const argentinaCoords = [-34.6037, -64.9673]; // Centro del país
-const initialZoom = 4; // Nivel de zoom para ver todo el país
+const argentinaCoords = [-34.6037, -64.9673];
+const initialZoom = 4;
 
-// 1.2. Inicializar el mapa de Leaflet en el elemento con id="mapa"
+// 1.2. Inicializar el mapa de Leaflet
 var mapa = L.map('mapa').setView(argentinaCoords, initialZoom);
 
-// 1.3. Añadir la capa de mosaicos (tiles) de OpenStreetMap
+// 1.3. Añadir la capa de mosaicos
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -17,10 +22,9 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 
 // =================================================================
-// 3. LÓGICA DEL FORMULARIO Y EVENTOS
+// 2. LÓGICA DEL FORMULARIO FLOTANTE (Añadir Marcador)
 // =================================================================
 
-// 3.1. Obtener referencias a los elementos del DOM
 const marcadorForm = document.getElementById('marcador-form');
 const confirmationPopup = document.getElementById('confirmation-popup');
 const formContent = document.getElementById('form-content');
@@ -28,15 +32,13 @@ const addMarkerForm = document.getElementById('add-marker-form');
 const latitudInput = document.getElementById('latitud');
 const longitudInput = document.getElementById('longitud');
 
-// Referencias para mostrar coordenadas
-const coordsDisplay = document.getElementById('coords-display');         
+const coordsDisplay = document.getElementById('coords-display');         
 const popupCoordsDisplay = document.getElementById('popup-coords-display'); 
 
 const btnConfirmarSi = document.getElementById('confirmar-si');
 const btnConfirmarNo = document.getElementById('confirmar-no');
-const btnCancelarForm = document.getElementById('cancelar-form'); // Botón Cancelar del formulario
+const btnCancelarForm = document.getElementById('cancelar-form');
 
-// 3.2. Variable para almacenar el marcador temporal del clic y las coordenadas
 let marcadorTemporal = null;
 let clickedCoords = null;
 
@@ -52,63 +54,61 @@ function resetMapClick() {
     }
 }
 
-// 3.3. Manejar el evento de clic en el mapa para **mostrar la confirmación**
+// 2.1. Manejar el evento de clic en el mapa (CUALQUIER CLIC ACTIVA LA CARGA)
 mapa.on('click', function(e) {
-    const { lat, lng } = e.latlng;
     
-    // Si ya existe un marcador temporal, lo removemos
+    // Quitar el marcador temporal anterior si existe
     if (marcadorTemporal) {
         mapa.removeLayer(marcadorTemporal);
     }
     
-    // Almacenamos las coordenadas para usarlas después de la confirmación
+    const { lat, lng } = e.latlng;
     clickedCoords = { lat, lng };
 
-    // Creamos y guardamos el nuevo marcador temporal para indicar la ubicación elegida
+    // Añadir el nuevo marcador temporal
     marcadorTemporal = L.marker([lat, lng]).addTo(mapa);
     
-    // Actualizar la visualización de coordenadas en el popup de confirmación
     const latFormatted = lat.toFixed(6);
     const lngFormatted = lng.toFixed(6);
     
+    // Mostrar coordenadas en el popup de confirmación
     if (popupCoordsDisplay) {
         popupCoordsDisplay.textContent = `Lat: ${latFormatted}, Lng: ${lngFormatted}`;
     }
 
-    // Mostramos solo el popup de confirmación
+    // Mostrar el formulario flotante (Ventana Emergente)
     confirmationPopup.style.display = 'block';
-    formContent.style.display = 'none';
+    formContent.style.display = 'none'; // Asegurarse de que el formulario de datos esté oculto
     marcadorForm.style.display = 'block';
 
-    // Mover la vista del mapa para centrar el marcador y la ventana emergente si es necesario
+    // Centrar el mapa en el punto para mejor visibilidad del formulario
     mapa.panTo([lat, lng]);
 });
 
-// 3.4. Manejar el clic en el botón **"Sí"**
+// 2.2. Manejar el clic en el botón **"Sí"**
 btnConfirmarSi.addEventListener('click', function() {
     if (clickedCoords) {
-        // Rellenar las coordenadas en los campos ocultos y en el display visible del formulario
         latitudInput.value = clickedCoords.lat;
         longitudInput.value = clickedCoords.lng;
         coordsDisplay.textContent = `Lat: ${clickedCoords.lat.toFixed(6)}, Lng: ${clickedCoords.lng.toFixed(6)}`;
 
-        // Ocultar el popup de confirmación y mostrar el formulario
+        // Mostrar el formulario de datos
         confirmationPopup.style.display = 'none';
         formContent.style.display = 'block';
     }
 });
 
-// 3.5. Manejar el clic en el botón **"No"**
+// 2.3. Manejar el clic en el botón **"No"**
 btnConfirmarNo.addEventListener('click', function() {
-    resetMapClick(); // Cancela la acción
+    resetMapClick(); 
 });
 
 
-// 3.6. Manejar el envío del formulario (Guardar Academia)
+// 2.4. Manejar el envío del formulario (Guardar Academia)
 addMarkerForm.addEventListener('submit', function(e) {
     e.preventDefault(); 
 
-    // 1. Recoger todos los valores del formulario
+    // 1. Recoger todos los valores
     const datos = {
         nombreAcademia: document.getElementById('nombre-academia').value,
         direccion: document.getElementById('direccion').value,
@@ -118,10 +118,9 @@ addMarkerForm.addEventListener('submit', function(e) {
         nombreProfesor: document.getElementById('nombre-profesor').value,
         telefono: document.getElementById('telefono').value,
         mail: document.getElementById('mail').value,
-        sitioWeb: document.getElementById('sitio-web').value, // <-- ¡NUEVO CAMPO!
+        sitioWeb: document.getElementById('sitio-web').value, 
         observaciones: document.getElementById('observaciones').value,
         
-        // Coordenadas y archivo
         latitud: parseFloat(latitudInput.value), 
         longitud: parseFloat(longitudInput.value),
         fotoFile: document.getElementById('foto').files[0] 
@@ -129,7 +128,7 @@ addMarkerForm.addEventListener('submit', function(e) {
 
     console.log("Datos a guardar:", datos);
     
-    // 2. Crear un marcador PERMANENTE en el mapa con la información
+    // 2. Crear un marcador PERMANENTE
     L.marker([datos.latitud, datos.longitud], { 
         title: datos.nombreAcademia 
     })
@@ -163,16 +162,15 @@ addMarkerForm.addEventListener('submit', function(e) {
 });
 
 
-// 3.7. Manejar el botón de **Cancelar** del formulario
+// 2.5. Manejar el botón de **Cancelar** del formulario
 btnCancelarForm.addEventListener('click', function() {
-    resetMapClick(); // Ocultar todo y quitar el marcador temporal
+    resetMapClick();
 });
 
-// 3.8. Manejar la selección de archivo para mostrar el nombre
+// 2.6. Manejar la selección de archivo para mostrar el nombre
 const fotoInput = document.getElementById('foto');
 const fileNameDisplay = document.getElementById('file-name-display');
 
-// Asegúrate de que este bloque esté en tu script.js para que el nombre del archivo se muestre correctamente
 if (fotoInput && fileNameDisplay) {
     fotoInput.addEventListener('change', function() {
         if (this.files && this.files.length > 0) {
@@ -185,10 +183,11 @@ if (fotoInput && fileNameDisplay) {
 
 
 // =================================================================
-// 4. CORRECCIÓN DE TAMAÑO (Para evitar mapa gris/roto)
+// 3. CORRECCIÓN DE TAMAÑO (Leaflet)
 // =================================================================
 
 window.addEventListener('load', function() {
+    // Forzar redibujo del mapa
     setTimeout(function() {
         mapa.invalidateSize();
     }, 0);
