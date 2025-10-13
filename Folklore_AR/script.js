@@ -1,194 +1,265 @@
-// =================================================================
-// 0. ESTADO GLOBAL (Simplificado)
-// =================================================================
-// No necesitamos variables de estado ni lógica de login.
+// 1. Inicializar el Mapa
+const map = L.map('mapa').setView([-34.00, -64.00], 5); 
 
-// =================================================================
-// 1. INICIALIZACIÓN DEL MAPA
-// =================================================================
-
-// 1.1. Configuración de la vista inicial para Argentina
-const argentinaCoords = [-34.6037, -64.9673];
-const initialZoom = 4;
-
-// 1.2. Inicializar el mapa de Leaflet
-var mapa = L.map('mapa').setView(argentinaCoords, initialZoom);
-
-// 1.3. Añadir la capa de mosaicos
+// 2. Añadir la capa de OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(mapa);
+}).addTo(map);
 
+// ----------------------------------------------------------------------
+// Lógica y variables globales
+// ----------------------------------------------------------------------
 
-// =================================================================
-// 2. LÓGICA DEL FORMULARIO FLOTANTE (Añadir Marcador)
-// =================================================================
+// Referencias a elementos del DOM
+const markerForm = document.getElementById('marcador-form');
+const coordsDisplay = document.getElementById('coords-display');
+const latInput = document.getElementById('latitud');
+const lonInput = document.getElementById('longitud');
+const tipoMarcadorInput = document.getElementById('tipo_marcador'); // Referencia al selector
 
-const marcadorForm = document.getElementById('marcador-form');
-const confirmationPopup = document.getElementById('confirmation-popup');
-const formContent = document.getElementById('form-content');
-const addMarkerForm = document.getElementById('add-marker-form');
-const latitudInput = document.getElementById('latitud');
-const longitudInput = document.getElementById('longitud');
+let tempMarker = null; // Para guardar el marcador temporal al hacer clic
+let confirmationPopup = null; // Para guardar la referencia al popup de confirmación
 
-const coordsDisplay = document.getElementById('coords-display');         
-const popupCoordsDisplay = document.getElementById('popup-coords-display'); 
+// ----------------------------------------------------------------------
+// 3. Funciones para crear iconos de diferentes colores (Azul, Verde, Rojo)
+// ----------------------------------------------------------------------
 
-const btnConfirmarSi = document.getElementById('confirmar-si');
-const btnConfirmarNo = document.getElementById('confirmar-no');
-const btnCancelarForm = document.getElementById('cancelar-form');
+/**
+ * Crea un icono de marcador personalizado con el color y opacidad especificados.
+ * @param {string} colorHex - El código de color HEX (#RRGGBB).
+ * @param {number} opacity - La opacidad del pin (e.g., 0.8).
+ * @param {string} strokeColor - Color del borde del círculo central.
+ * @returns {L.DivIcon} El objeto icono de Leaflet.
+ */
+function createCustomIcon(colorHex, opacity, strokeColor) {
+    const svgIcon = `
+        <svg width="30" height="42" viewBox="0 0 30 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+            
+            <path d="M15 0C6.71573 0 0 6.71573 0 15C0 24.3333 15 42 15 42C15 42 30 24.3333 30 15C30 6.71573 23.2843 0 15 0Z" 
+                  fill="${colorHex}" fill-opacity="${opacity}"/> 
+            <circle cx="15" cy="15" r="7" fill="white" stroke="${strokeColor}" stroke-width="1.5"/> 
+        </svg>
+    `;
 
-let marcadorTemporal = null;
-let clickedCoords = null;
+    return L.divIcon({
+        className: 'custom-map-marker',
+        html: svgIcon,
+        iconSize: [30, 42],
+        iconAnchor: [15, 42]
+    });
+}
 
-// Función para restablecer la vista (oculta el formulario/popup y quita el marcador)
-function resetMapClick() {
-    marcadorForm.style.display = 'none';
-    formContent.style.display = 'none';
-    confirmationPopup.style.display = 'block'; 
-    
-    if (marcadorTemporal) {
-        mapa.removeLayer(marcadorTemporal);
-        marcadorTemporal = null;
+// Iconos específicos usando la función genérica
+const iconAcademia = createCustomIcon('#007bff', 0.8, '#0056b3'); // Azul
+const iconPena = createCustomIcon('#28a745', 0.8, '#1e7e34');     // Verde
+const iconEvento = createCustomIcon('#dc3545', 0.8, '#a71d2a');   // Rojo
+
+/**
+ * Obtiene el icono de Leaflet según el tipo de marcador seleccionado.
+ * @param {string} type - 'academia', 'pena', o 'evento'.
+ * @returns {L.DivIcon}
+ */
+function getIconByType(type) {
+    switch(type) {
+        case 'academia':
+            return iconAcademia;
+        case 'pena':
+            return iconPena;
+        case 'evento':
+            return iconEvento;
+        default:
+            // Por defecto, usa el azul si algo falla
+            return iconAcademia; 
     }
 }
 
-// 2.1. Manejar el evento de clic en el mapa (CUALQUIER CLIC ACTIVA LA CARGA)
-mapa.on('click', function(e) {
-    
-    // Quitar el marcador temporal anterior si existe
-    if (marcadorTemporal) {
-        mapa.removeLayer(marcadorTemporal);
+// ----------------------------------------------------------------------
+// 4. Manejar el evento de clic en el mapa (Muestra el Popup de Confirmación)
+// ----------------------------------------------------------------------
+map.on('click', function(e) {
+    // Limpiar marcadores y popups anteriores
+    if (tempMarker) {
+        map.removeLayer(tempMarker); 
+        tempMarker = null;
+    }
+    if (confirmationPopup) {
+        map.closePopup(confirmationPopup);
+        confirmationPopup = null;
     }
     
-    const { lat, lng } = e.latlng;
-    clickedCoords = { lat, lng };
+    markerForm.style.display = 'none';
 
-    // Añadir el nuevo marcador temporal
-    marcadorTemporal = L.marker([lat, lng]).addTo(mapa);
+    const lat = e.latlng.lat.toFixed(6);
+    const lon = e.latlng.lng.toFixed(6);
+    const latlng = e.latlng;
     
-    const latFormatted = lat.toFixed(6);
-    const lngFormatted = lng.toFixed(6);
+    // Contenido del Popup de Confirmación
+    const popupContent = `
+        <div class="confirm-popup-content" style="text-align: center;">
+            <p style="font-weight: bold; margin-bottom: 5px;">¿Agregar nuevo Marcador aquí?</p>
+            <p>
+                Lat: ${lat}<br>
+                Lon: ${lon}
+            </p>
+            <button id="btn-confirm-yes" 
+                    style="background-color: #007bff; color: white; border: none; padding: 5px 10px; margin-right: 10px; cursor: pointer; border-radius: 4px; font-weight: bold; transition: background-color 0.2s;">
+                Sí
+            </button>
+            <button id="btn-confirm-no" 
+                    style="background-color: white; color: #007bff; border: 1px solid #007bff; padding: 5px 10px; cursor: pointer; border-radius: 4px; font-weight: bold; transition: background-color 0.2s;">
+                No
+            </button>
+        </div>
+    `;
+
+    // Usamos el icono AZUL por defecto para el marcador temporal
+    tempMarker = L.marker(latlng, { icon: iconAcademia }).addTo(map);
+
+    // Mostrar el popup de confirmación
+    confirmationPopup = L.popup({
+        closeButton: false, 
+        autoClose: false,
+        className: 'argentina-confirm-popup'
+    })
+    .setLatLng(latlng)
+    .setContent(popupContent)
+    .openOn(map);
     
-    // Mostrar coordenadas en el popup de confirmación
-    if (popupCoordsDisplay) {
-        popupCoordsDisplay.textContent = `Lat: ${latFormatted}, Lng: ${lngFormatted}`;
+    // Manejar clics de los botones (Solución robusta con setTimeout)
+    setTimeout(() => {
+        const btnYes = document.getElementById('btn-confirm-yes');
+        const btnNo = document.getElementById('btn-confirm-no');
+        
+        if (btnYes) {
+            btnYes.onclick = function() {
+                // Rellenar coordenadas Y REINICIAR EL SELECTOR
+                // **CORRECCIÓN 1: Usar backticks (`) para template literals**
+                coordsDisplay.textContent = `${lat}, ${lon}`; 
+                latInput.value = lat;
+                lonInput.value = lon;
+                tipoMarcadorInput.value = ""; // Asegura que el usuario seleccione el tipo
+                
+                // Mostrar el formulario centrado
+                markerForm.style.display = 'block'; 
+                
+                // Cerrar el popup de confirmación
+                map.closePopup(confirmationPopup);
+            };
+        }
+        
+        if (btnNo) {
+            btnNo.onclick = function() {
+                // Cerrar el popup y eliminar el marcador temporal
+                map.closePopup(confirmationPopup);
+                if (tempMarker) {
+                    map.removeLayer(tempMarker);
+                    tempMarker = null;
+                }
+            };
+        }
+    }, 50); 
+});
+
+
+// ----------------------------------------------------------------------
+// 5. Manejar el envío del formulario (Recolección completa y Popup detallado)
+// ----------------------------------------------------------------------
+document.getElementById('add-marker-form').addEventListener('submit', function(event) {
+    event.preventDefault(); 
+    
+    // 5.1 Validación del tipo de marcador
+    const markerType = tipoMarcadorInput.value;
+
+    if (!markerType) {
+        alert("Por favor, selecciona el tipo de marcador.");
+        return;
     }
 
-    // Mostrar el formulario flotante (Ventana Emergente)
-    confirmationPopup.style.display = 'block';
-    formContent.style.display = 'none'; // Asegurarse de que el formulario de datos esté oculto
-    marcadorForm.style.display = 'block';
-
-    // Centrar el mapa en el punto para mejor visibilidad del formulario
-    mapa.panTo([lat, lng]);
-});
-
-// 2.2. Manejar el clic en el botón **"Sí"**
-btnConfirmarSi.addEventListener('click', function() {
-    if (clickedCoords) {
-        latitudInput.value = clickedCoords.lat;
-        longitudInput.value = clickedCoords.lng;
-        coordsDisplay.textContent = `Lat: ${clickedCoords.lat.toFixed(6)}, Lng: ${clickedCoords.lng.toFixed(6)}`;
-
-        // Mostrar el formulario de datos
-        confirmationPopup.style.display = 'none';
-        formContent.style.display = 'block';
-    }
-});
-
-// 2.3. Manejar el clic en el botón **"No"**
-btnConfirmarNo.addEventListener('click', function() {
-    resetMapClick(); 
-});
-
-
-// 2.4. Manejar el envío del formulario (Guardar Academia)
-addMarkerForm.addEventListener('submit', function(e) {
-    e.preventDefault(); 
-
-    // 1. Recoger todos los valores
-    const datos = {
-        nombreAcademia: document.getElementById('nombre-academia').value,
+    const lat = latInput.value;
+    const lon = lonInput.value;
+    
+    // Recolectar TODOS los campos
+    const formData = {
+        nombre_sitio: document.getElementById('nombre_sitio').value,
         direccion: document.getElementById('direccion').value,
         localidad: document.getElementById('localidad').value,
         departamento: document.getElementById('departamento').value,
         provincia: document.getElementById('provincia').value,
-        nombreProfesor: document.getElementById('nombre-profesor').value,
+        referente: document.getElementById('referente').value,
         telefono: document.getElementById('telefono').value,
-        mail: document.getElementById('mail').value,
-        sitioWeb: document.getElementById('sitio-web').value, 
+        email: document.getElementById('email').value,
+        sitio_web: document.getElementById('sitio_web').value,
         observaciones: document.getElementById('observaciones').value,
-        
-        latitud: parseFloat(latitudInput.value), 
-        longitud: parseFloat(longitudInput.value),
-        fotoFile: document.getElementById('foto').files[0] 
+        latitud: lat,
+        longitud: lon,
+        tipo: markerType,
+        expires: null
     };
 
-    console.log("Datos a guardar:", datos);
+    // 5.2. Determinar la fecha de expiración para eventos
+    if (markerType === 'evento') {
+        const date = new Date();
+        date.setDate(date.getDate() + 10); // 10 días desde ahora
+        formData.expires = date.toISOString();
+    }
+
+    console.log("Datos listos para enviar al servidor:", formData);
     
-    // 2. Crear un marcador PERMANENTE
-    L.marker([datos.latitud, datos.longitud], { 
-        title: datos.nombreAcademia 
-    })
-     .addTo(mapa)
-     .bindPopup(`
-        <div style="color: #0288D1;">
-            <b>${datos.nombreAcademia}</b>
+    // 5.3. Construir el contenido HTML detallado para el Popup
+    // **CORRECCIÓN 2: Asegurar que los ternarios devuelvan strings con backticks (`)**
+    let popupHTML = `
+        <div style="font-family: Arial, sans-serif; max-width: 250px;">
+            <h4 style="margin: 0 0 5px; color: #007bff;">${formData.nombre_sitio}</h4>
+            <p style="margin: 0 0 10px; font-style: italic; font-size: 0.9em;">
+                Tipo: <strong>${markerType.charAt(0).toUpperCase() + markerType.slice(1)}</strong>
+            </p>
+            
+            <hr style="margin: 5px 0; border-top: 1px solid #eee;">
+            
+            <p style="margin: 0;"><strong>Dirección:</strong> ${formData.direccion}, ${formData.localidad}</p>
+            <p style="margin: 0;"><strong>Ubicación:</strong> ${formData.departamento}, ${formData.provincia}</p>
+            <p style="margin: 5px 0 0;"><strong>Referente:</strong> ${formData.referente}</p>
+            
+            <hr style="margin: 5px 0; border-top: 1px solid #eee;">
+
+            <p style="margin: 0;"><strong>Teléfono:</strong> ${formData.telefono}</p>
+            ${formData.email ? `<p style="margin: 0;"><strong>Email:</strong> <a href="mailto:${formData.email}">${formData.email}</a></p>` : ''}
+            ${formData.sitio_web ? `<p style="margin: 0;"><strong>Web:</strong> <a href="${formData.sitio_web}" target="_blank">Ver sitio</a></p>` : ''}
+
+            <p style="margin-top: 10px; font-size: 0.9em;">
+                <strong>Observaciones:</strong><br>${formData.observaciones}
+            </p>
+
+            ${formData.expires ? `<p style="margin: 10px 0 0; font-size: 0.8em; color: #dc3545;">
+                <span style="font-weight: bold;">¡EVENTO TEMPORAL!</span> Expira el: ${new Date(formData.expires).toLocaleDateString()}
+            </p>` : ''}
         </div>
-        <hr style="border-top: 1px solid #4FC3F7;">
-        Profesor/a: <b>${datos.nombreProfesor}</b><br>
-        Teléfono: ${datos.telefono}<br>
-        Mail: <a href="mailto:${datos.mail}">${datos.mail}</a><br>
-        
-        ${datos.sitioWeb ? `Web: <a href="${datos.sitioWeb.startsWith('http') ? datos.sitioWeb : 'http://' + datos.sitioWeb}" target="_blank">${datos.sitioWeb}</a><br>` : ''}
-        
-        <br>
-        <u>Ubicación:</u><br>
-        Dirección: ${datos.direccion}<br>
-        Localidad: ${datos.localidad} (${datos.departamento})<br>
-        Provincia: ${datos.provincia}<br>
-        ${datos.observaciones ? `<hr><i>Obs: ${datos.observaciones}</i>` : ''}
-        ${datos.fotoFile ? `<p style="margin-top:5px; font-size: 0.8em;">(Foto: ${datos.fotoFile.name})</p>` : ''}
-    `)
-     .openPopup();
-     
-    // 3. Ocultar el formulario y limpiarlo
-    resetMapClick(); 
-    addMarkerForm.reset(); 
+    `;
+
+
+    // 5.4. AÑADIR EL MARCADOR PERMANENTE AL MAPA (Simulación)
+    const finalIcon = getIconByType(markerType);
     
-    alert(`Academia "${datos.nombreAcademia}" guardada (simulación y marcada en el mapa).`);
+    // Eliminar el marcador temporal
+    if (tempMarker) {
+        map.removeLayer(tempMarker);
+        tempMarker = null;
+    }
+
+    // Crear el marcador "final"
+    L.marker([lat, lon], { icon: finalIcon })
+        .addTo(map)
+        .bindPopup(popupHTML) // Usamos el HTML detallado
+        .openPopup();
+
+    
+    // 5.5 Ocultar y limpiar
+    markerForm.style.display = 'none';
+    document.getElementById('add-marker-form').reset(); 
+    
+    // **CORRECCIÓN 3: Usar backticks (`) para el alert final**
+    alert(`Marcador de tipo "${markerType}" simulado guardado.`);
 });
 
 
-// 2.5. Manejar el botón de **Cancelar** del formulario
-btnCancelarForm.addEventListener('click', function() {
-    resetMapClick();
-});
-
-// 2.6. Manejar la selección de archivo para mostrar el nombre
-const fotoInput = document.getElementById('foto');
-const fileNameDisplay = document.getElementById('file-name-display');
-
-if (fotoInput && fileNameDisplay) {
-    fotoInput.addEventListener('change', function() {
-        if (this.files && this.files.length > 0) {
-            fileNameDisplay.textContent = this.files[0].name;
-        } else {
-            fileNameDisplay.textContent = 'Ningún archivo seleccionado';
-        }
-    });
-}
-
-
-// =================================================================
-// 3. CORRECCIÓN DE TAMAÑO (Leaflet)
-// =================================================================
-
-window.addEventListener('load', function() {
-    // Forzar redibujo del mapa
-    setTimeout(function() {
-        mapa.invalidateSize();
-    }, 0);
-});
