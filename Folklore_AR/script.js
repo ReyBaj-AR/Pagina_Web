@@ -19,7 +19,6 @@ const lonInput = document.getElementById('longitud');
 const tipoMarcadorInput = document.getElementById('tipo_marcador'); // Referencia al selector
 
 let tempMarker = null; // Para guardar el marcador temporal al hacer clic
-let confirmationPopup = null; // Para guardar la referencia al popup de confirmación
 
 // ----------------------------------------------------------------------
 // 3. Funciones para crear iconos de diferentes colores (Azul, Verde, Rojo)
@@ -52,8 +51,8 @@ function createCustomIcon(colorHex, opacity, strokeColor) {
 
 // Iconos específicos usando la función genérica
 const iconAcademia = createCustomIcon('#007bff', 0.8, '#0056b3'); // Azul
-const iconPena = createCustomIcon('#28a745', 0.8, '#1e7e34');     // Verde
-const iconEvento = createCustomIcon('#dc3545', 0.8, '#a71d2a');   // Rojo
+const iconPena = createCustomIcon('#28a745', 0.8, '#1e7e34');     // Verde
+const iconEvento = createCustomIcon('#dc3545', 0.8, '#a71d2a');   // Rojo
 
 /**
  * Obtiene el icono de Leaflet según el tipo de marcador seleccionado.
@@ -76,17 +75,17 @@ function getIconByType(type) {
 
 // ----------------------------------------------------------------------
 // 4. Manejar el evento de clic en el mapa (Muestra el Popup de Confirmación)
+//    (MÁXIMA ROBUSTEZ: Uso de setTimeout y clases)
 // ----------------------------------------------------------------------
 map.on('click', function(e) {
-    // Limpiar marcadores y popups anteriores
+    
+    // 1. Limpiar marcador y popups anteriores
     if (tempMarker) {
         map.removeLayer(tempMarker); 
         tempMarker = null;
     }
-    if (confirmationPopup) {
-        map.closePopup(confirmationPopup);
-        confirmationPopup = null;
-    }
+    // ¡¡CLAVE!!: Cerrar *cualquier* popup que esté abierto en el mapa.
+    map.closePopup(); 
     
     markerForm.style.display = 'none';
 
@@ -94,7 +93,8 @@ map.on('click', function(e) {
     const lon = e.latlng.lng.toFixed(6);
     const latlng = e.latlng;
     
-    // Contenido del Popup de Confirmación
+    // Contenido del Popup de Confirmación.
+    // Usamos CLASES para evitar IDs duplicados y simplificar el selector.
     const popupContent = `
         <div class="confirm-popup-content" style="text-align: center;">
             <p style="font-weight: bold; margin-bottom: 5px;">¿Agregar nuevo Marcador aquí?</p>
@@ -102,68 +102,77 @@ map.on('click', function(e) {
                 Lat: ${lat}<br>
                 Lon: ${lon}
             </p>
-            <button id="btn-confirm-yes" 
+            <button class="btn-confirm-yes-local" 
+                    data-lat="${lat}" 
+                    data-lon="${lon}"
                     style="background-color: #007bff; color: white; border: none; padding: 5px 10px; margin-right: 10px; cursor: pointer; border-radius: 4px; font-weight: bold; transition: background-color 0.2s;">
                 Sí
             </button>
-            <button id="btn-confirm-no" 
+            <button class="btn-confirm-no-local" 
                     style="background-color: white; color: #007bff; border: 1px solid #007bff; padding: 5px 10px; cursor: pointer; border-radius: 4px; font-weight: bold; transition: background-color 0.2s;">
                 No
             </button>
         </div>
     `;
 
-    // Usamos el icono AZUL por defecto para el marcador temporal
+    // 2. Crear y añadir el marcador temporal
     tempMarker = L.marker(latlng, { icon: iconAcademia }).addTo(map);
 
-    // Mostrar el popup de confirmación
-    confirmationPopup = L.popup({
+    // 3. Crear el popup y enlazarlo al marcador temporal.
+    tempMarker.bindPopup(popupContent, {
         closeButton: false, 
         autoClose: false,
         className: 'argentina-confirm-popup'
-    })
-    .setLatLng(latlng)
-    .setContent(popupContent)
-    .openOn(map);
-    
-    // Manejar clics de los botones (Solución robusta con setTimeout)
+    }).openPopup();
+
+    // 4. Manejo de eventos con un setTimeout (último recurso por problemas de sincronización)
     setTimeout(() => {
-        const btnYes = document.getElementById('btn-confirm-yes');
-        const btnNo = document.getElementById('btn-confirm-no');
+        // Obtenemos el contenedor DOM del popup. 
+        // ¡IMPORTANTE! Solo podemos hacerlo si el marcador tiene un popup abierto.
+        const popup = tempMarker.getPopup();
+        if (!popup || !popup.isOpen()) return; // Salir si por alguna razón no se abrió
+
+        const popupContainer = popup.getElement();
         
+        // Buscamos los botones dentro de ESTE contenedor específico usando la CLASE
+        const btnYes = popupContainer.querySelector('.btn-confirm-yes-local');
+        const btnNo = popupContainer.querySelector('.btn-confirm-no-local');
+        
+        // Lógica del botón "Sí"
         if (btnYes) {
             btnYes.onclick = function() {
-                // Rellenar coordenadas Y REINICIAR EL SELECTOR
-                // **CORRECCIÓN 1: Usar backticks (`) para template literals**
-                coordsDisplay.textContent = `${lat}, ${lon}`; 
-                latInput.value = lat;
-                lonInput.value = lon;
-                tipoMarcadorInput.value = ""; // Asegura que el usuario seleccione el tipo
+                // Obtenemos las coordenadas de los atributos data-* del botón (más seguro)
+                const currentLat = this.getAttribute('data-lat');
+                const currentLon = this.getAttribute('data-lon');
                 
-                // Mostrar el formulario centrado
+                // Rellenar formulario
+                coordsDisplay.textContent = `${currentLat}, ${currentLon}`; 
+                latInput.value = currentLat;
+                lonInput.value = currentLon;
+                tipoMarcadorInput.value = ""; 
+                
+                // Mostrar el formulario
                 markerForm.style.display = 'block'; 
                 
-                // Cerrar el popup de confirmación
-                map.closePopup(confirmationPopup);
+                // Cerrar el popup asociado al marcador
+                map.closePopup(popup);
             };
         }
         
+        // Lógica del botón "No"
         if (btnNo) {
             btnNo.onclick = function() {
-                // Cerrar el popup y eliminar el marcador temporal
-                map.closePopup(confirmationPopup);
-                if (tempMarker) {
-                    map.removeLayer(tempMarker);
-                    tempMarker = null;
-                }
+                // Cerrar el popup y ELIMINAR el marcador temporal asociado.
+                map.removeLayer(tempMarker);
+                tempMarker = null;
             };
         }
-    }, 50); 
+    }, 200); // 200ms es un tiempo seguro para la inyección del DOM en Leaflet
 });
 
 
 // ----------------------------------------------------------------------
-// 5. Manejar el envío del formulario (Recolección completa y Popup detallado)
+// 5. Manejar el envío del formulario (Sin cambios)
 // ----------------------------------------------------------------------
 document.getElementById('add-marker-form').addEventListener('submit', function(event) {
     event.preventDefault(); 
@@ -207,7 +216,6 @@ document.getElementById('add-marker-form').addEventListener('submit', function(e
     console.log("Datos listos para enviar al servidor:", formData);
     
     // 5.3. Construir el contenido HTML detallado para el Popup
-    // **CORRECCIÓN 2: Asegurar que los ternarios devuelvan strings con backticks (`)**
     let popupHTML = `
         <div style="font-family: Arial, sans-serif; max-width: 250px;">
             <h4 style="margin: 0 0 5px; color: #007bff;">${formData.nombre_sitio}</h4>
@@ -241,7 +249,7 @@ document.getElementById('add-marker-form').addEventListener('submit', function(e
     // 5.4. AÑADIR EL MARCADOR PERMANENTE AL MAPA (Simulación)
     const finalIcon = getIconByType(markerType);
     
-    // Eliminar el marcador temporal
+    // Eliminar el marcador temporal si aún existía (por si acaso)
     if (tempMarker) {
         map.removeLayer(tempMarker);
         tempMarker = null;
@@ -258,8 +266,12 @@ document.getElementById('add-marker-form').addEventListener('submit', function(e
     markerForm.style.display = 'none';
     document.getElementById('add-marker-form').reset(); 
     
-    // **CORRECCIÓN 3: Usar backticks (`) para el alert final**
     alert(`Marcador de tipo "${markerType}" simulado guardado.`);
 });
+
+
+
+
+
 
 
