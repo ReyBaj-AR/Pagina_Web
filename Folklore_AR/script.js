@@ -273,5 +273,3 @@ document.getElementById('add-marker-form').addEventListener('submit', function(e
 
 
 
-
-
