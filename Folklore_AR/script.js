@@ -51,7 +51,7 @@ function createCustomIcon(colorHex, opacity, strokeColor) {
 
 // Iconos específicos usando la función genérica
 const iconAcademia = createCustomIcon('#007bff', 0.8, '#0056b3'); // Azul
-const iconPena = createCustomIcon('#28a745', 0.8, '#1e7e34');     // Verde
+const iconPeña = createCustomIcon('#28a745', 0.8, '#1e7e34');     // Verde
 const iconEvento = createCustomIcon('#dc3545', 0.8, '#a71d2a');   // Rojo
 
 /**
@@ -63,8 +63,8 @@ function getIconByType(type) {
     switch(type) {
         case 'academia':
             return iconAcademia;
-        case 'pena':
-            return iconPena;
+        case 'peña':
+            return iconPeña;
         case 'evento':
             return iconEvento;
         default:
@@ -268,8 +268,3 @@ document.getElementById('add-marker-form').addEventListener('submit', function(e
     
     alert(`Marcador de tipo "${markerType}" simulado guardado.`);
 });
-
-
-
-
-
