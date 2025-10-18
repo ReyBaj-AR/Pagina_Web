@@ -34,13 +34,19 @@
         }
 
         /* ----------------------------------------------------- */
-        /* CSS DEL BANNER DE IMAGEN (CLAVE PARA LA FLEXIBILIDAD) */
+        /* CSS DEL BANNER DE IMAGEN (APLICADO AL CARRUSEL) */
         /* ----------------------------------------------------- */
+        #foto-banner,
+        #foto-banner .carousel-inner, /* AÑADIDO: asegura que el inner ocupa el 100% */
+        #foto-banner .carousel-item {  /* AÑADIDO: asegura que el item ocupa el 100% */
+    height: 100%; 
+}
+
         #foto-banner {
             width: 90%; 
-            max-width: 1200px; /* Mismo ancho que #acerca-de y #mapa */
+            max-width: 900px; /* Mismo ancho que #acerca-de y #mapa */
             margin: 20px 0 0 0; 
-            height: 650px; /* Altura que puedes ajustar */
+            height: 550px; /* Altura que puedes ajustar */
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             overflow: hidden; /* Clave: Oculta cualquier parte de la imagen que exceda */
@@ -272,76 +278,102 @@
     </div>
 </nav>
     
-    <div class="content-wrapper">
-        
-        <div id="foto-banner">
-            <img src="./Imagenes/FolkloreMap.jpg" alt="Banner de FolkloreMap">
+<div class="content-wrapper">
+    
+    <div id="foto-banner" class="carousel slide" data-bs-ride="carousel"> 
+        <div class="carousel-inner">
+            <div class="carousel-item active" data-bs-interval="10000">
+                <img src="./Imagenes/FolkloreMap.jpg" class="d-block w-100" alt="Danza Folklórica Argentina 1">
+            </div>
+            <div class="carousel-item" data-bs-interval="2000">
+                <img src="./imagenes/pareja1.webp" class="d-block w-100" alt="Danza Folklórica Argentina 2">
+            </div>
+            <div class="carousel-item">
+                <img src="./imagenes/parejas.webp" class="d-block w-100" alt="Danza Folklórica Argentina 3">
+            </div>
+            <div class="carousel-item" data-bs-interval="2000">
+                <img src="./imagenes/mapa2.jpg" class="d-block w-100" alt="Danza Folklórica Argentina 2">
+            </div>
+            <div class="carousel-item" data-bs-interval="2000">
+                <img src="./imagenes/Patio-Santiagueño-773x458.jpeg" class="d-block w-100" alt="Danza Folklórica Argentina 2">
+            </div>
         </div>
-        <div id="acerca-de">
-            <h2>Acerca del Proyecto</h2>
-            <p>
-                El Proyecto FolkloreMap nace a partir de la necesidad de conocer los distintos actores que
-                componen en la actualidad la realidad de la Danza Folklórica Argentina a lo
-                largo y ancho de nuestro país. En el libro “Manual de Danzas Nativas” del
-                profesor Pedro Berruti, podemos encontrar una sección titulada “Peñas, Centros,
-                e Instituciones donde se bailan las Danzas Nativas”, en el cuál se enumera una
-                lista bastante completa de estas instituciones. El problema es que ese libro, o
-                al menos la 5ta. edición, que es la que yo tengo en mi biblioteca, es del año
-                1962; por lo tanto, esta lista está desactualizada.
-            </p>
-            <p>
-                Como no existe un listado actualizado de estas instituciones, se me ocurrió hacerlo yo mismo, y
-                qué mejor que servirme de las herramientas que disponemos hoy en día para
-                hacerlo.
-            </p>
-            <p>
-                El Proyecto FolkloreMap busca mapear la mayor cantidad posible de academias, talleres de
-                danzas, patios de folklore, peñas y distintos eventos relacionados con la danza folklórica argentina, generando así una gran base de datos
-                colaborativa de la que todos podamos beneficiarnos.
-            </p>
-            
-            <h3>¿Cómo funciona?</h3>
-            <p>
-                Vos que sos
-                profesor/a y tenés tu propia academia, o dictas un taller de danza, enseñás folklore en una
-                escuela, tenés una peña, o promovés de alguna manera esta actividad tan amada por todos
-                nosotros, podés registrarla de manera GRATUITA en el Proyecto FolkloreMap y
-                mostrarla a todo el mundo.
-            </p>
-            
-            <h3>¿Cómo se hace?</h3>
-            <p>
-                Simplemente
-                navegás en el mapa hasta la ubicación deseada, hacés clic en el lugar correcto y
-                se va a desplegar un formulario en el cuál vas a poder dejar todos los datos
-                necesarios para que los usuarios que miran el mapa, puedan ponerse en contacto
-                con vos.
-            </p>
+        <button class="carousel-control-prev" type="button" data-bs-target="#foto-banner" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#foto-banner" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>    
 
-            <h3>Eventos temporales</h3>
-            <p>
-                Si sos
-                organizador/a de un evento temporal, como un festival, una peña especial, un
-                encuentro de danzas, etc., también podés registrarlo en el mapa. La única
-                diferencia es que estos eventos van a tener una vigencia de 10 días desde la
-                fecha de su creación, y luego van a desaparecer automáticamente del mapa.
-            </p>
-            <h3>Colores de los marcadores</h3>
-            <p>
-                Los marcadores en el mapa tendrán diferentes colores según el tipo de sitio que
-                representen:
-            </p>
-            <ul>
-                <li><i class="bi bi-geo-alt-fill" style="color: blue;"></i>: Academia y/o Taller de Danzas Folklóricas Argentinas</li>
-                <li><i class="bi bi-geo-alt-fill" style="color: green;"></i>: Peña y/o Patio de Folklore</li>
-                <li><i class="bi bi-geo-alt-fill" style="color: red;"></i>: Evento Temporal</li>
-            </ul>
-            <p>
-                De esta manera, los usuarios podrán identificar fácilmente el tipo de sitio que están buscando en el mapa.
-            </p>
-        </div>
-        <div id="mapa"></div>
-        </div> 
+    <div id="acerca-de">
+        <h2>Acerca del Proyecto</h2>
+        <p>
+            El Proyecto FolkloreMap nace a partir de la necesidad de conocer los distintos actores que
+            componen en la actualidad la realidad de la Danza Folklórica Argentina a lo
+            largo y ancho de nuestro país. En el libro “Manual de Danzas Nativas” del
+            profesor Pedro Berruti, podemos encontrar una sección titulada “Peñas, Centros,
+            e Instituciones donde se bailan las Danzas Nativas”, en el cuál se enumera una
+            lista bastante completa de estas instituciones. El problema es que ese libro, o
+            al menos la 5ta. edición, que es la que yo tengo en mi biblioteca, es del año
+            1962; por lo tanto, esta lista está desactualizada.
+        </p>
+        <p>
+            Como no existe un listado actualizado de estas instituciones, se me ocurrió hacerlo yo mismo, y
+            qué mejor que servirme de las herramientas que disponemos hoy en día para
+            hacerlo.
+        </p>
+        <p>
+            El Proyecto FolkloreMap busca mapear la mayor cantidad posible de academias, talleres de
+            danzas, patios de folklore, peñas y distintos eventos relacionados con la danza folklórica argentina, generando así una gran base de datos
+            colaborativa de la que todos podamos beneficiarnos.
+        </p>
+        
+        <h3>¿Cómo funciona?</h3>
+        <p>
+            Vos que sos
+            profesor/a y tenés tu propia academia, o dictas un taller de danza, enseñás folklore en una
+            escuela, tenés una peña, o promovés de alguna manera esta actividad tan amada por todos
+            nosotros, podés registrarla de manera GRATUITA en el Proyecto FolkloreMap y
+            mostrarla a todo el mundo.
+        </p>
+        
+        <h3>¿Cómo se hace?</h3>
+        <p>
+            Simplemente
+            navegás en el mapa hasta la ubicación deseada, hacés clic en el lugar correcto y
+            se va a desplegar un formulario en el cuál vas a poder dejar todos los datos
+            necesarios para que los usuarios que miran el mapa, puedan ponerse en contacto
+            con vos.
+        </p>
+
+        <h3>Eventos temporales</h3>
+        <p>
+            Si sos
+            organizador/a de un evento temporal, como un festival, una peña especial, un
+            encuentro de danzas, etc., también podés registrarlo en el mapa. La única
+            diferencia es que estos eventos van a tener una vigencia de 10 días desde la
+            fecha de su creación, y luego van a desaparecer automáticamente del mapa.
+        </p>
+        <h3>Colores de los marcadores</h3>
+        <p>
+            Los marcadores en el mapa tendrán diferentes colores según el tipo de sitio que
+            representen:
+        </p>
+        <ul>
+            <li><i class="bi bi-geo-alt-fill" style="color: blue;"></i>: Academia y/o Taller de Danzas Folklóricas Argentinas</li>
+            <li><i class="bi bi-geo-alt-fill" style="color: green;"></i>: Peña y/o Patio de Folklore</li>
+            <li><i class="bi bi-geo-alt-fill" style="color: red;"></i>: Evento Temporal</li>
+        </ul>
+        <p>
+            De esta manera, los usuarios podrán identificar fácilmente el tipo de sitio que están buscando en el mapa.
+        </p>
+    </div>
+    <div id="mapa"></div>
+    </div> 
+    
     <div class="marcador-form" id="marcador-form">
         <h3>Añadir Nuevo Marcador</h3>
         <p>Coordenadas: <span id="coords-display"></span></p>
