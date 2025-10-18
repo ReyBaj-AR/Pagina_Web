@@ -245,12 +245,21 @@
         }
 
         /* ESTILOS DE LA VENTANA DE CONFIRMACIÓN (Leaflet Popup - Sin cambios) */
-        .leaflet-popup-content {
-            font-size: 14px; 
-        }
-        .leaflet-popup-content p {
-            font-size: 14px; 
-        }
+      /* ESTILOS DE LA VENTANA DE CONFIRMACIÓN (Leaflet Popup - Achicar) */
+.leaflet-popup-content-wrapper {
+    /* Limita el ancho del contenedor externo del popup si es necesario */
+    max-width: 200px !important; /* Prueba con un ancho más pequeño, ej: 200px */
+}
+
+.leaflet-popup-content {
+    /* Reduce la fuente de la "etiqueta" */
+    font-size: 12px; /* Reducido de 14px a 12px */
+}
+
+.leaflet-popup-content p {
+    font-size: 12px; /* Asegura que los párrafos también se reduzcan */
+    margin: 0 0 3px 0 !important; /* Reduce el margen inferior entre líneas */
+}
         /* ... Estilos específicos de popup (omito el resto por brevedad si no han cambiado) ... */
     </style>
 </head>
