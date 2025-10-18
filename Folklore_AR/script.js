@@ -21,6 +21,38 @@ const tipoMarcadorInput = document.getElementById('tipo_marcador'); // Referenci
 let tempMarker = null; // Para guardar el marcador temporal al hacer clic
 
 // ----------------------------------------------------------------------
+// >>>>> LÓGICA CORREGIDA PARA CERRAR EL MENÚ MÓVIL AL HACER CLIC <<<<<
+// ----------------------------------------------------------------------
+document.addEventListener('DOMContentLoaded', function () {
+    // 1. Obtén la referencia al contenedor del colapso de Bootstrap
+    const collapseMenu = document.getElementById('navbarNavDropdown');
+    
+    if (collapseMenu) {
+        // 2. Obtén todos los enlaces de anclaje (que van a #acerca-de, #mapa, etc.)
+        const navLinks = collapseMenu.querySelectorAll('.nav-link');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                // 3. Verifica si el menú está abierto ('show' en Bootstrap)
+                if (collapseMenu.classList.contains('show')) {
+                    
+                    // 4. Instancia y usa la API de Collapse de Bootstrap para cerrar el menú.
+                    // Usamos setTimeout para dar tiempo al navegador a procesar el desplazamiento
+                    // al anclaje (#acerca-de, #mapa).
+                    setTimeout(() => {
+                        const bsCollapse = bootstrap.Collapse.getInstance(collapseMenu) || new bootstrap.Collapse(collapseMenu, { toggle: false });
+                        bsCollapse.hide();
+                    }, 150); 
+                }
+            });
+        });
+    }
+});
+// ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------
 // 3. Funciones para crear iconos de diferentes colores (Azul, Verde, Rojo)
 // ----------------------------------------------------------------------
 
@@ -51,8 +83,8 @@ function createCustomIcon(colorHex, opacity, strokeColor) {
 
 // Iconos específicos usando la función genérica
 const iconAcademia = createCustomIcon('#007bff', 0.8, '#0056b3'); // Azul
-const iconPeña = createCustomIcon('#28a745', 0.8, '#1e7e34');     // Verde
-const iconEvento = createCustomIcon('#dc3545', 0.8, '#a71d2a');   // Rojo
+const iconPeña = createCustomIcon('#28a745', 0.8, '#1e7e34');     // Verde
+const iconEvento = createCustomIcon('#dc3545', 0.8, '#a71d2a');   // Rojo
 
 /**
  * Obtiene el icono de Leaflet según el tipo de marcador seleccionado.
@@ -75,7 +107,6 @@ function getIconByType(type) {
 
 // ----------------------------------------------------------------------
 // 4. Manejar el evento de clic en el mapa (Muestra el Popup de Confirmación)
-//    (MÁXIMA ROBUSTEZ: Uso de setTimeout y clases)
 // ----------------------------------------------------------------------
 map.on('click', function(e) {
     
