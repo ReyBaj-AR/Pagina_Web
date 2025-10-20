@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proyecto FolkloreMap</title>
+    <title>Proyecto FolkloreMap - Explorar Mapa</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     
@@ -32,8 +32,7 @@
             padding-bottom: 20px; 
             min-height: 100vh;
         }
-
-        /* ----------------------------------------------------- */
+/* ----------------------------------------------------- */
         /* CSS DEL BANNER DE IMAGEN (APLICADO AL CARRUSEL) */
         /* ----------------------------------------------------- */
         #foto-banner,
@@ -154,112 +153,21 @@
             color: #d0e6ff; 
         }
 
-        /* ----------------------------------------------------- */
-        /* ESTILOS DE LA VENTANA DE CARGA (Sin cambios) */
-        /* ----------------------------------------------------- */
-        .marcador-form {
-            /* CENTRADO ABSOLUTO EN PANTALLA (Viewport) */
-            position: fixed; 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-
-            z-index: 10000; 
-            
-            /* Corrección para dispositivos pequeños/desbordamiento */
-            max-height: 90vh; 
-            overflow-y: auto; 
-
-            /* Estilos visuales */
-            background: rgba(240, 248, 255, 0.95); 
-            border: 2px solid #007bff; 
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
-            max-width: 350px; 
-            width: 90%; 
-            display: none; 
-            color: #333;
-        }
-
-        .marcador-form h3, .marcador-form p, .marcador-form label {
-            color: #007bff; 
-        }
-        
-        .marcador-form input, 
-        .marcador-form textarea, 
-        .marcador-form select { 
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            box-sizing: border-box;
-            border: 1px solid #007bff; 
-            border-radius: 4px;
-            background-color: white; 
-        }
-
-        .marcador-form label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        /* Botón GUARDAR (Celeste) */
-        .marcador-form button[type="submit"] {
-            background-color: #007bff; 
-            color: white;
-            font-weight: bold;
-            border: none;
-            transition: background-color 0.2s;
-        }
-        .marcador-form button[type="submit"]:hover {
-            background-color: #0056b3; 
-        }
-
-        /* Botón CANCELAR (Blanco/Gris Claro) */
-        .marcador-form button[type="button"] {
-            background-color: #ffffff; 
-            color: #007bff; 
-            border: 1px solid #007bff;
-            font-weight: bold;
-            transition: background-color 0.2s;
-        }
-        .marcador-form button[type="button"]:hover {
-            background-color: #e9ecef; 
-        }
-        
-        .marcador-form select#tipo_marcador option:hover,
-        .marcador-form select#tipo_marcador option:checked {
-            background-color: #e6f3ff !important; 
-            color: #007bff; 
-        }
-
-        .marcador-form select#tipo_marcador option {
-            background-color: white;
-            color: #333;
-        }
-        
-        .marcador-form select#tipo_marcador:focus option:checked {
-            background-color: #e6f3ff !important; 
-            color: #007bff;
-        }
-
         /* ESTILOS DE LA VENTANA DE CONFIRMACIÓN (Leaflet Popup - Achicar) */
 .leaflet-popup-content-wrapper {
     /* Limita el ancho del contenedor externo del popup si es necesario */
-    max-width: 200px !important; /* Prueba con un ancho más pequeño, ej: 200px */
+    max-width: 200px !important; 
 }
 
 .leaflet-popup-content {
     /* Reduce la fuente de la "etiqueta" */
-    font-size: 12px; /* Reducido de 14px a 12px */
+    font-size: 12px; 
 }
 
 .leaflet-popup-content p {
-    font-size: 12px; /* Asegura que los párrafos también se reduzcan */
-    margin: 0 0 3px 0 !important; /* Reduce el margen inferior entre líneas */
+    font-size: 12px; 
+    margin: 0 0 3px 0 !important; 
 }
-        /* ... Estilos específicos de popup (omito el resto por brevedad si no han cambiado) ... */
     </style>
 </head>
 <body>
@@ -286,8 +194,12 @@
                 </li>
                 
                 <li class="nav-item">
-                    <a class="nav-link" href="#mapa">
-                        Explorar Mapa
+                    <a class="nav-link" href="#mapa">Explorar Mapa
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="./Agregar_Sitio.html">Agregar Sitio
                     </a>
                 </li>
                 </ul>
@@ -323,7 +235,7 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>
-    </div>     
+    </div>     
 
     <div id="acerca-de">
         <h2>Acerca del Proyecto</h2>
@@ -389,55 +301,8 @@
         </p>
     </div>
     <div id="mapa"></div>
+    
     </div> 
-    
-    <div class="marcador-form" id="marcador-form">
-        <h3>Añadir Nuevo Marcador</h3>
-        <p>Coordenadas: <span id="coords-display"></span></p>
-
-        <form id="add-marker-form">
-            
-            <label for="tipo_marcador" style="color: #007bff; font-weight: bold; margin-top: 5px;">Tipo de Sitio</label>
-            <select id="tipo_marcador" required style="margin-bottom: 10px;">
-                <option value="" disabled selected>Seleccione el tipo de sitio</option>
-                <option value="academia">Academia y/o Taller de Danza (Azul)</option>
-                <option value="peña">Peña y/o Patio de Folklore (Verde)</option>
-                <option value="evento">Evento Temporal (Rojo - Expira en 10 días)</option>
-            </select>
-            
-            <input type="text" id="nombre_sitio" placeholder="Nombre del sitio, Academia, Taller, Patio, Etc" required>
-            <input type="text" id="direccion" placeholder="Dirección" required>
-            
-            <label for="provincia">Provincia:</label>
-            <select id="provincia" name="provincia" required>
-                <option value="">Cargando provincias...</option>
-            </select>
-            
-            <label for="localidad">Localidad:</label>
-            <select id="localidad" name="localidad" required disabled>
-                <option value="">Selecciona una provincia primero</option>
-            </select>
-            
-    
-            <input type="text" id="referente" placeholder="Nombre del Profesor/a, Referente, Dueño" required>
-            <input type="tel" id="telefono" placeholder="Teléfono" required>
-            <input type="email" id="email" placeholder="Correo Electrónico" required>
-            <input type="url" id="sitio_web" placeholder="Sitio Web (opcional)">
-            
-            <textarea 
-                id="observaciones" 
-                placeholder="Describa aquí los servicios que ofrece su academia y los días y horarios de clase." 
-                rows="4" 
-                required
-            ></textarea>
-            
-            <input type="hidden" id="latitud">
-            <input type="hidden" id="longitud">
-            
-            <button type="submit">Guardar Marcador</button>
-            <button type="button" onclick="document.getElementById('marcador-form').style.display = 'none';">Cancelar</button>
-        </form>
-    </div>
     
     <footer id="contacto" class="footer seccion-oscura d-flex flex-column align-items-center justify-content-center py-4"> 
         <p class="footer-texto text-center">Sitio Web desarrollado por Javier Varela.</p>
@@ -455,9 +320,20 @@
     </footer>
     
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="script.js"></script> 
+    <script>
+        // JavaScript para inicializar el mapa y solo permitir la visualización.
+        
+        // Inicializa el mapa en una ubicación central (ejemplo: centro de Argentina)
+        var map = L.map('mapa').setView([-34.6037, -58.3816], 5); // Coordenadas y Zoom inicial
+
+        // Añade la capa de mosaicos (tiles) de OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+    </script>
+
 </body>
 </html>

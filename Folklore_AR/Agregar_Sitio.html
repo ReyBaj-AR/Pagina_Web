@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto FolkloreMap</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link 
+        rel="stylesheet" 
+        href="https://unpkg.com/leaflet/dist/leaflet.css" 
+    />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; 
+        }
+        
+        .content-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centra horizontalmente los elementos hijos */
+            /* Ajustado para compensar el navbar fijo */
+            padding-top: 56px; 
+            padding-bottom: 20px; 
+            min-height: 100vh;
+        }
+
+        /* ----------------------------------------------------- */
+        /* CSS DEL BANNER DE IMAGEN (APLICADO AL CARRUSEL) */
+        /* ----------------------------------------------------- */
+        #foto-banner,
+        #foto-banner .carousel-inner, /* AÑADIDO: asegura que el inner ocupa el 100% */
+        #foto-banner .carousel-item {  /* AÑADIDO: asegura que el item ocupa el 100% */
+            height: 100%; 
+        }
+
+        #foto-banner {
+            width: 90%; 
+            max-width: 900px; /* Mismo ancho que #acerca-de y #mapa */
+            margin: 20px 0 0 0; 
+            height: 550px; /* Altura que puedes ajustar */
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* Clave: Oculta cualquier parte de la imagen que exceda */
+        }
+        
+        #foto-banner img {
+            width: 100%; /* Ocupa todo el ancho disponible */
+            height: 100%; /* Ocupa todo el alto definido en el contenedor */
+            object-fit: cover; /* Clave: Cubre el contenedor sin distorsionarse */
+            display: block;
+        }
+        /* ----------------------------------------------------- */
+
+        #acerca-de {
+            width: 90%; 
+            max-width: 1200px;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: justify;
+            
+            /* Desplazamiento para compensar el navbar fijo */
+            scroll-margin-top: 70px; 
+        }
+
+        #acerca-de h2 {
+            border-bottom: 2px solid #0d6efd; 
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+
+        #mapa {
+            height: 70vh; 
+            width: 90%; 
+            max-width: 1200px; 
+            border: 2px solid #333; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+            margin-bottom: 20px; 
+            
+            /* Desplazamiento para el enlace "Explorar Mapa" */
+            scroll-margin-top: 70px; 
+        }
+        
+        /* ----------------------------------------------------- */
+        /* Color Azul Oscuro Personalizado para el Navbar y Footer */
+        /* ----------------------------------------------------- */
+        .bg-custom-blue {
+            background-color: #003366 !important; /* Azul Marino/Oscuro */
+        }
+        
+        /* Estilo para la Marca del Navbar (FolkloreMap) - Agrandado */
+        .navbar-brand {
+            font-size: 1.8rem; /* Agrandar la fuente */
+            font-weight: bold; 
+        }
+        
+        /* AJUSTE CLAVE: HACER EL ÍCONO DE HAMBURGUESA BLANCO */
+        .navbar-toggler-icon {
+            /* Filtro para convertir el color oscuro por defecto del icono en blanco */
+            filter: invert(1) grayscale(100%) brightness(200%); 
+        }
+        /* AJUSTE CLAVE: FIN */
+        
+        /* Ajustar el color del texto del navbar para que sea blanco sobre el fondo oscuro */
+        .navbar-custom-text .navbar-brand,
+        .navbar-custom-text .nav-link,
+        .navbar-custom-text .navbar-toggler-icon {
+            color: white !important;
+            fill: white; /* Para SVG como el toggler icon */
+        }
+        /* Ajustar el color del texto en hover/activo */
+        .navbar-custom-text .nav-link.active,
+        .navbar-custom-text .nav-link:hover {
+            color: #d0e6ff !important; /* Azul más claro al hacer hover */
+        }
+        /* Asegurar que el icono del botón sea visible */
+        .navbar-custom-text .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Estilos del Footer */
+        .seccion-oscura {
+            background-color: #003366; /* Mismo color del navbar */
+            color: white;
+            width: 100%;
+        }
+        
+        .footer-texto {
+            font-size: 1.05rem;
+            margin-bottom: 5px;
+            color: white; 
+        }
+
+        .iconos-redes-sociales a {
+            color: white; 
+            font-size: 2rem;
+            margin: 0 15px;
+            transition: color 0.2s ease;
+        }
+
+        .iconos-redes-sociales a:hover {
+            color: #d0e6ff; 
+        }
+
+        /* ----------------------------------------------------- */
+        /* ESTILOS ESPECÍFICOS PARA EL CONTENIDO DE AGREGAR SITIO */
+        /* ----------------------------------------------------- */
+        #agregar-sitio-contenido {
+            width: 90%; 
+            max-width: 1200px;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: justify;
+        }
+
+        /* ESTILO MEJORADO PARA EL TÍTULO H2: Registrar Nuevo Sitio Folklórico */
+        #agregar-sitio-contenido h2 {
+            font-size: 2.2rem; /* Tamaño de fuente más grande */
+            font-weight: 700; /* Negrita */
+            color: #003366; /* Color azul oscuro principal */
+            text-align: center; /* CENTRADO SOLICITADO */
+            padding-bottom: 10px; /* Espacio debajo del texto */
+            margin-bottom: 20px; /* Margen debajo de la línea */
+            border-bottom: 3px solid #0d6efd; /* Línea separadora azul vibrante */
+            letter-spacing: 0.5px; /* Espaciado sutil */
+        }
+        
+        /* Estilo para el párrafo de advertencia (manteniendo el que ya tenías) */
+        .aviso-permisos {
+            font-weight: bold; 
+            color: #003366; 
+            padding: 15px; 
+            border: 2px solid #003366; 
+            background-color: #e6f0ff; 
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        /* ----------------------------------------------------- */
+        /* ESTILOS DE LA VENTANA DE CARGA (Sin cambios) */
+        /* ----------------------------------------------------- */
+        .marcador-form {
+            /* CENTRADO ABSOLUTO EN PANTALLA (Viewport) */
+            position: fixed; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+
+            z-index: 10000; 
+            
+            /* Corrección para dispositivos pequeños/desbordamiento */
+            max-height: 90vh; 
+            overflow-y: auto; 
+
+            /* Estilos visuales */
+            background: rgba(240, 248, 255, 0.95); 
+            border: 2px solid #007bff; 
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
+            max-width: 350px; 
+            width: 90%; 
+            display: none; 
+            color: #333;
+        }
+
+        .marcador-form h3, .marcador-form p, .marcador-form label {
+            color: #007bff; 
+        }
+        
+        .marcador-form input, 
+        .marcador-form textarea, 
+        .marcador-form select { 
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #007bff; 
+            border-radius: 4px;
+            background-color: white; 
+        }
+
+        .marcador-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        /* Botón GUARDAR (Celeste) */
+        .marcador-form button[type="submit"] {
+            background-color: #007bff; 
+            color: white;
+            font-weight: bold;
+            border: none;
+            transition: background-color 0.2s;
+        }
+        .marcador-form button[type="submit"]:hover {
+            background-color: #0056b3; 
+        }
+
+        /* Botón CANCELAR (Blanco/Gris Claro) */
+        .marcador-form button[type="button"] {
+            background-color: #ffffff; 
+            color: #007bff; 
+            border: 1px solid #007bff;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        .marcador-form button[type="button"]:hover {
+            background-color: #e9ecef; 
+        }
+        
+        .marcador-form select#tipo_marcador option:hover,
+        .marcador-form select#tipo_marcador option:checked {
+            background-color: #e6f3ff !important; 
+            color: #007bff; 
+        }
+
+        .marcador-form select#tipo_marcador option {
+            background-color: white;
+            color: #333;
+        }
+        
+        .marcador-form select#tipo_marcador:focus option:checked {
+            background-color: #e6f3ff !important; 
+            color: #007bff;
+        }
+
+        /* ESTILOS DE LA VENTANA DE CONFIRMACIÓN (Leaflet Popup - Achicar) */
+.leaflet-popup-content-wrapper {
+    /* Limita el ancho del contenedor externo del popup si es necesario */
+    max-width: 200px !important; /* Prueba con un ancho más pequeño, ej: 200px */
+}
+
+.leaflet-popup-content {
+    /* Reduce la fuente de la "etiqueta" */
+    font-size: 12px; /* Reducido de 14px a 12px */
+}
+
+.leaflet-popup-content p {
+    font-size: 12px; /* Asegura que los párrafos también se reduzcan */
+    margin: 0 0 3px 0 !important; /* Reduce el margen inferior entre líneas */
+}
+        /* ... Estilos específicos de popup (omito el resto por brevedad si no han cambiado) ... */
+    </style>
+</head>
+<body>
+    
+    <nav class="navbar navbar-expand-lg bg-custom-blue fixed-top navbar-custom-text">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">FolkloreMap</a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="./Index.html">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./Index.html#acerca-de">Acerca de</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="Pacto.html">Pacto</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="./Index.html#mapa">Explorar Mapa</a>
+                    </a>
+                </li>
+                
+                </li>
+                </ul>
+        </div>
+    </div>
+</nav>
+    
+    <div class="content-wrapper">
+        
+        <div id="agregar-sitio-contenido">
+            <h2 id="agregar-sitio-titulo">Registrar Nuevo Sitio Folklórico</h2>
+            
+            <p class="aviso-permisos">
+                Para asegurar la calidad y exactitud de nuestra base de datos, te recordamos que, al utilizar la función **"Agregar Sitio"**, debes **tener la autorización expresa** para compartir la información. Solo registraremos en FolkloreMap Academias, Talleres, Peñas, Patios o Eventos que estén **actualmente activos, se centren en la Danza Folklórica Argentina**, y de los cuales tengas la **autoridad legítima** para compartir los datos (dueño, profesor, organizador). Antes de continuar, por favor, revisa detalladamente nuestro <a href="Pacto.html" style="color: #cc0000; text-decoration: underline;">**Pacto de Responsabilidad**</a> para confirmar que tu sitio cumple con estas directrices de inclusión y responsabilidad.
+            </p>
+
+            <p>
+                **Instrucciones de Registro:** Para comenzar a registrar tu sitio, simplemente navega en el mapa que se muestra a continuación hasta la ubicación deseada. Una vez allí, haz clic en el punto exacto donde se encuentra tu academia, peña o evento. Esto desplegará un formulario donde podrás ingresar todos los detalles necesarios para el registro.
+            </p>
+        </div>
+
+    
+    <div id="mapa"></div>
+     
+    
+    <div class="marcador-form" id="marcador-form">
+        <h3>Añadir Nuevo Marcador</h3>
+        <p>Coordenadas: <span id="coords-display"></span></p>
+
+        <form id="add-marker-form">
+            
+            <label for="tipo_marcador" style="color: #007bff; font-weight: bold; margin-top: 5px;">Tipo de Sitio</label>
+            <select id="tipo_marcador" required style="margin-bottom: 10px;">
+                <option value="" disabled selected>Seleccione el tipo de sitio</option>
+                <option value="academia">Academia y/o Taller de Danza (Azul)</option>
+                <option value="peña">Peña y/o Patio de Folklore (Verde)</option>
+                <option value="evento">Evento Temporal (Rojo - Expira en 10 días)</option>
+            </select>
+            
+            <input type="text" id="nombre_sitio" placeholder="Nombre del sitio, Academia, Taller, Patio, Etc" required>
+            <input type="text" id="direccion" placeholder="Dirección" required>
+            
+            <label for="provincia">Provincia:</label>
+            <select id="provincia" name="provincia" required>
+                <option value="">Cargando provincias...</option>
+            </select>
+            
+            <label for="localidad">Localidad:</label>
+            <select id="localidad" name="localidad" required disabled>
+                <option value="">Selecciona una provincia primero</option>
+            </select>
+            
+    
+            <input type="text" id="referente" placeholder="Nombre del Profesor/a, Referente, Dueño" required>
+            <input type="tel" id="telefono" placeholder="Teléfono" required>
+            <input type="email" id="email" placeholder="Correo Electrónico" required>
+            <input type="url" id="sitio_web" placeholder="Sitio Web (opcional)">
+            
+            <textarea 
+                id="observaciones" 
+                placeholder="Describa aquí los servicios que ofrece su academia y los días y horarios de clase." 
+                rows="4" 
+                required
+            ></textarea>
+            
+            <input type="hidden" id="latitud">
+            <input type="hidden" id="longitud">
+            
+            <button type="submit">Guardar Marcador</button>
+            <button type="button" onclick="document.getElementById('marcador-form').style.display = 'none';">Cancelar</button>
+        </form>
+    </div>
+    
+    <footer id="contacto" class="footer seccion-oscura d-flex flex-column align-items-center justify-content-center py-4"> 
+        <p class="footer-texto text-center">Sitio Web desarrollado por Javier Varela.</p>
+        <div class="iconos-redes-sociales d-flex flex-wrap justify-content-center">
+            <a href="https://github.com/ReyBaj-AR" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-github"></i>
+            </a> 
+            <a href="https://www.instagram.com/reybaj_/" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-instagram"></i>
+            </a> 
+            <a href="https://www.linkedin.com/in/javier-varela-82038362/" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-linkedin"></i>
+            </a> 
+        </div>
+    </footer>
+    
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="script.js"></script> 
+</body>
+</html>
