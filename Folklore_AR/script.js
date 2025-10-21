@@ -1,17 +1,20 @@
 // ----------------------------------------------------------------------
 // CONFIGURACIÓN INICIAL DEL MAPA Y VARIABLES GLOBALES
 // ----------------------------------------------------------------------
-
+let map;
 // 1. Inicializar el Mapa
 // eslint-disable-next-line no-undef
-const map = L.map('mapa').setView([-34.00, -64.00], 5); 
+if (document.getElementById('mapa')) {
+    // eslint-disable-next-line no-undef
+    map = L.map('mapa').setView([-34.00, -64.00], 5);
 
-// 2. Añadir la capa de OpenStreetMap
-// eslint-disable-next-line no-undef
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
+    // 2. Añadir la capa de OpenStreetMap
+    // eslint-disable-next-line no-undef
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+}
 
 // URL Base de la API Georef
 const URL_GEOREF = 'https://apis.datos.gob.ar/georef/api/';
@@ -233,155 +236,161 @@ function getIconByType(type) {
 // ----------------------------------------------------------------------
 // EVENTO CLICK EN MAPA (SIN CAMBIOS ESTRUCTURALES)
 // ----------------------------------------------------------------------
-map.on('click', function(e) {
-    
-    if (tempMarker) {
-        map.removeLayer(tempMarker); 
-        tempMarker = null;
-    }
-    // eslint-disable-next-line no-undef
-    map.closePopup(); 
-    
-    markerForm.style.display = 'none';
-
-    const lat = e.latlng.lat.toFixed(6);
-    const lon = e.latlng.lng.toFixed(6);
-    const latlng = e.latlng;
-    
-    const popupContent = `
-        <div class="confirm-popup-content" style="text-align: center;">
-            <p style="font-weight: bold; margin-bottom: 5px;">¿Agregar nuevo Marcador aquí?</p>
-            <p>Lat: ${lat}<br>Lon: ${lon}</p>
-            <button class="btn-confirm-yes-local" 
-                    data-lat="${lat}" 
-                    data-lon="${lon}"
-                    style="background-color: #007bff; color: white; border: none; padding: 5px 10px; margin-right: 10px; cursor: pointer; border-radius: 4px; font-weight: bold;">
-                Sí
-            </button>
-            <button class="btn-confirm-no-local" 
-                    style="background-color: white; color: #007bff; border: 1px solid #007bff; padding: 5px 10px; cursor: pointer; border-radius: 4px; font-weight: bold;">
-                No
-            </button>
-        </div>
-    `;
-
-    // eslint-disable-next-line no-undef
-    tempMarker = L.marker(latlng, { icon: iconAcademia }).addTo(map);
-    tempMarker.bindPopup(popupContent, { closeButton: false, autoClose: false }).openPopup();
-
-    setTimeout(() => {
-        const popup = tempMarker.getPopup();
-        if (!popup || !popup.isOpen()) return;
-        const popupContainer = popup.getElement();
+// Solo añadir el evento de click si estamos en la página de "Agregar Sitio" (donde existe el formulario)
+if (map && markerForm) {
+    map.on('click', function(e) {
         
-        const btnYes = popupContainer.querySelector('.btn-confirm-yes-local');
-        const btnNo = popupContainer.querySelector('.btn-confirm-no-local');
-        
-        if (btnYes) {
-            btnYes.onclick = function() {
-                const currentLat = this.getAttribute('data-lat');
-                const currentLon = this.getAttribute('data-lon');
-                
-                coordsDisplay.textContent = `${currentLat}, ${currentLon}`; 
-                latInput.value = currentLat;
-                lonInput.value = currentLon;
-                tipoMarcadorInput.value = '';
-                
-                selectProvincia.value = '';
-                selectLocalidad.innerHTML = '<option value="">Selecciona una provincia primero</option>';
-                selectLocalidad.disabled = true;
-                
-                markerForm.style.display = 'block';
-                map.closePopup(); 
-            };
+        if (tempMarker) {
+            map.removeLayer(tempMarker); 
+            tempMarker = null;
         }
+        // eslint-disable-next-line no-undef
+        map.closePopup(); 
         
-        if (btnNo) {
-            btnNo.onclick = function() {
-                if (tempMarker) {
-                    map.removeLayer(tempMarker); 
-                    tempMarker = null;
-                }
-                map.closePopup(); 
-            };
-        }
-    }, 10); 
-});
+        markerForm.style.display = 'none';
+
+        const lat = e.latlng.lat.toFixed(6);
+        const lon = e.latlng.lng.toFixed(6);
+        const latlng = e.latlng;
+        
+        const popupContent = `
+            <div class="confirm-popup-content" style="text-align: center;">
+                <p style="font-weight: bold; margin-bottom: 5px;">¿Agregar nuevo Marcador aquí?</p>
+                <p>Lat: ${lat}<br>Lon: ${lon}</p>
+                <button class="btn-confirm-yes-local" 
+                        data-lat="${lat}" 
+                        data-lon="${lon}"
+                        style="background-color: #007bff; color: white; border: none; padding: 5px 10px; margin-right: 10px; cursor: pointer; border-radius: 4px; font-weight: bold;">
+                    Sí
+                </button>
+                <button class="btn-confirm-no-local" 
+                        style="background-color: white; color: #007bff; border: 1px solid #007bff; padding: 5px 10px; cursor: pointer; border-radius: 4px; font-weight: bold;">
+                    No
+                </button>
+            </div>
+        `;
+
+        // eslint-disable-next-line no-undef
+        tempMarker = L.marker(latlng, { icon: iconAcademia }).addTo(map);
+        tempMarker.bindPopup(popupContent, { closeButton: false, autoClose: false }).openPopup();
+
+        setTimeout(() => {
+            const popup = tempMarker.getPopup();
+            if (!popup || !popup.isOpen()) return;
+            const popupContainer = popup.getElement();
+            
+            const btnYes = popupContainer.querySelector('.btn-confirm-yes-local');
+            const btnNo = popupContainer.querySelector('.btn-confirm-no-local');
+            
+            if (btnYes) {
+                btnYes.onclick = function() {
+                    const currentLat = this.getAttribute('data-lat');
+                    const currentLon = this.getAttribute('data-lon');
+                    
+                    coordsDisplay.textContent = `${currentLat}, ${currentLon}`; 
+                    latInput.value = currentLat;
+                    lonInput.value = currentLon;
+                    tipoMarcadorInput.value = '';
+                    
+                    selectProvincia.value = '';
+                    selectLocalidad.innerHTML = '<option value="">Selecciona una provincia primero</option>';
+                    selectLocalidad.disabled = true;
+                    
+                    markerForm.style.display = 'block';
+                    map.closePopup(); 
+                };
+            }
+            
+            if (btnNo) {
+                btnNo.onclick = function() {
+                    if (tempMarker) {
+                        map.removeLayer(tempMarker); 
+                        tempMarker = null;
+                    }
+                    map.closePopup(); 
+                };
+            }
+        }, 10); 
+    });
+}
 
 // ----------------------------------------------------------------------
 // ENVÍO DEL FORMULARIO
 // ----------------------------------------------------------------------
-document.getElementById('add-marker-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
+const addMarkerForm = document.getElementById('add-marker-form');
+if (addMarkerForm) {
+    addMarkerForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-    const tipo = document.getElementById('tipo_marcador').value;
-    const nombre = document.getElementById('nombre_sitio').value;
-    const direccion = document.getElementById('direccion').value;
-    const referente = document.getElementById('referente').value;
-    const telefono = document.getElementById('telefono').value;
-    const email = document.getElementById('email').value;
-    const sitioWeb = document.getElementById('sitio_web').value;
-    const observaciones = document.getElementById('observaciones').value;
-    const latitud = parseFloat(document.getElementById('latitud').value);
-    const longitud = parseFloat(document.getElementById('longitud').value);
-    
-    const provinciaSelect = document.getElementById('provincia');
-    const localidadSelect = document.getElementById('localidad');
-    
-    const provinciaNombre = provinciaSelect.options[provinciaSelect.selectedIndex].getAttribute('data-nombre') || 'N/A';
-    const localidadNombre = localidadSelect.value || 'N/A';
-    const departamentoPartido = localidadSelect.options[localidadSelect.selectedIndex].getAttribute('data-departamento') || 'N/A';
+        const tipo = document.getElementById('tipo_marcador').value;
+        const nombre = document.getElementById('nombre_sitio').value;
+        const direccion = document.getElementById('direccion').value;
+        const referente = document.getElementById('referente').value;
+        const telefono = document.getElementById('telefono').value;
+        const email = document.getElementById('email').value;
+        const sitioWeb = document.getElementById('sitio_web').value;
+        const observaciones = document.getElementById('observaciones').value;
+        const latitud = parseFloat(document.getElementById('latitud').value);
+        const longitud = parseFloat(document.getElementById('longitud').value);
+        
+        const provinciaSelect = document.getElementById('provincia');
+        const localidadSelect = document.getElementById('localidad');
+        
+        const provinciaNombre = provinciaSelect.options[provinciaSelect.selectedIndex].getAttribute('data-nombre') || 'N/A';
+        const localidadNombre = localidadSelect.value || 'N/A';
+        const departamentoPartido = localidadSelect.options[localidadSelect.selectedIndex].getAttribute('data-departamento') || 'N/A';
 
-    const popupHtml = `
-        <div style="font-family: Arial, sans-serif; max-width: 250px; line-height: 1.5;">
-            <h5 style="margin-top: 0; color: #003366;">${nombre}</h5>
-            <p><strong>Tipo:</strong> ${tipo.charAt(0).toUpperCase() + tipo.slice(1)}</p>
-            <p><strong>Provincia:</strong> ${provinciaNombre}</p>
-            <p><strong>Localidad:</strong> ${localidadNombre}</p>
-            <p><strong>Dirección:</strong> ${direccion}</p>
-            <p><strong>Referente:</strong> ${referente}</p>
-            <p><strong>Teléfono:</strong> <a href="tel:${telefono}" style="color: #007bff;">${telefono}</a></p>
-            ${email ? `<p><strong>Email:</strong> <a href="mailto:${email}" style="color: #007bff;">${email}</a></p>` : ''}
-            ${sitioWeb ? `<p><strong>Web:</strong> <a href="${sitioWeb}" target="_blank" style="color: #007bff;">Ver Sitio</a></p>` : ''}
-            <p><strong>Info Adicional:</strong></p>
-            <p style="font-size: 0.9em; white-space: pre-wrap;">${observaciones}</p>
-        </div>
-    `;
+        const popupHtml = `
+            <div style="font-family: Arial, sans-serif; max-width: 250px; line-height: 1.5;">
+                <h5 style="margin-top: 0; color: #003366;">${nombre}</h5>
+                <p><strong>Tipo:</strong> ${tipo.charAt(0).toUpperCase() + tipo.slice(1)}</p>
+                <p><strong>Provincia:</strong> ${provinciaNombre}</p>
+                <p><strong>Localidad:</strong> ${localidadNombre}</p>
+                <p><strong>Dirección:</strong> ${direccion}</p>
+                <p><strong>Referente:</strong> ${referente}</p>
+                <p><strong>Teléfono:</strong> <a href="tel:${telefono}" style="color: #007bff;">${telefono}</a></p>
+                ${email ? `<p><strong>Email:</strong> <a href="mailto:${email}" style="color: #007bff;">${email}</a></p>` : ''}
+                ${sitioWeb ? `<p><strong>Web:</strong> <a href="${sitioWeb}" target="_blank" style="color: #007bff;">Ver Sitio</a></p>` : ''}
+                <p><strong>Info Adicional:</strong></p>
+                <p style="font-size: 0.9em; white-space: pre-wrap;">${observaciones}</p>
+            </div>
+        `;
 
-    if (tempMarker) {
-        map.removeLayer(tempMarker);
-        tempMarker = null;
-    }
+        if (tempMarker) {
+            map.removeLayer(tempMarker);
+            tempMarker = null;
+        }
 
-    // eslint-disable-next-line no-undef
-    const newMarker = L.marker([latitud, longitud], { 
-        icon: getIconByType(tipo) 
-    }).addTo(map)
-      .bindPopup(popupHtml); 
+        // eslint-disable-next-line no-undef
+        const newMarker = L.marker([latitud, longitud], { 
+            icon: getIconByType(tipo) 
+        }).addTo(map)
+          .bindPopup(popupHtml); 
 
-    newMarker.openPopup();
+        newMarker.openPopup();
 
-    markerForm.style.display = 'none';
-    this.reset();
+        markerForm.style.display = 'none';
+        this.reset();
 
-    console.log("Marcador guardado y añadido al mapa.");
-    alert(`¡Marcador de ${nombre} guardado y añadido al mapa!`);
+        console.log("Marcador guardado y añadido al mapa.");
+        alert(`¡Marcador de ${nombre} guardado y añadido al mapa!`);
 
-    const datosDelMarcador = {
-        tipo,
-        nombre,
-        direccion,
-        provincia: provinciaNombre,
-        localidad: localidadNombre,
-        departamento: departamentoPartido, 
-        referente,
-        telefono,
-        email,
-        sitioWeb,
-        observaciones,
-        latitud,
-        longitud
-    };
+        const datosDelMarcador = {
+            tipo,
+            nombre,
+            direccion,
+            provincia: provinciaNombre,
+            localidad: localidadNombre,
+            departamento: departamentoPartido, 
+            referente,
+            telefono,
+            email,
+            sitioWeb,
+            observaciones,
+            latitud,
+            longitud
+        };
 
-    console.log("Datos listos para enviar al backend:", datosDelMarcador);
-});
+        console.log("Datos listos para enviar al backend:", datosDelMarcador);
+    });
+}
